@@ -73,7 +73,6 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
         });
       };
 
-      // Creating in loop creates bug, try calling a function to auto create all this fun
       for(i = 0; i < $scope.filteredEvents.length; i++) {
         new_marker($scope.filteredEvents[i]);
       }
@@ -107,7 +106,6 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
             // Setup default 'filter', this will grab all university and rso events
             $scope.rsos.unshift({name: 'University Events', filter: null, description: 'University Events'});
             $scope.rsos.unshift({name: 'All Events', filter: '', description: 'All Events & RSOs'});
-            // Fix bug with showing 'null' for newly created univserities
             if($scope.rsos[2].id === null) {
               var index = $scope.rsos.indexOf($scope.rsos[2]);
               $scope.rsos.splice(index, 1);
@@ -123,7 +121,7 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
     });
 
     // This retrieves ALL events that the user is authorized to view, it will be filtered based on the drop down selector
-    User.adminevent.get(function(response) {
+    User.universityevent.get(function(response) {
       if(response.status == 200) {
         $scope.events = response.data;
       }
@@ -220,26 +218,6 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
 
           $scope.validation = false;
           $scope.create = function(rsop) {
-            // There is probably a better way to do this, but this works for now feel free to fix ryan
-            if($scope.createEvent.location.$invalid) {
-              $scope.validation = 'Location cannot be empty';
-              return;
-            } else if($scope.createEvent.locationlat.$invalid) {
-              $scope.validation = 'Location latitude cannot be empty';
-              return;
-            } else if($scope.createEvent.locationlng.$invalid) {
-              $scope.validation = 'Location longitude cannot be empty';
-              return;
-            } else if($scope.createEvent.name.$invalid) {
-              $scope.validation = 'Location name cannot be empty';
-              return;
-            } else if($scope.createEvent.description.$invalid) {
-              $scope.validation = 'Event description cannot be empty';
-              return;
-            } else {
-              $scope.validation = false;
-            }
-              
             // Fix type and visibility
             var insert = rsop;
             insert.visibility = rsop.visibility.value;

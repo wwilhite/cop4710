@@ -47,6 +47,7 @@ app.directive('login', [function() {
 					} else {
 						$rootScope.loggedin = false;
 						$scope.errorMessage_login = data.data.message;
+						$location.url("/superHomepage");
 					}
 				});
 			};

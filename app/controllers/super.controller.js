@@ -8,7 +8,7 @@ app.controller('SuperController', ['$scope', 'Rso',
 			var update = {};
 			update.id = rso.id;
 			update.update = 'accept';
-			update.leaderid = rso.leaderid; // promote student to leader
+			update.adminid = rso.adminid; // promote student to admin 
 			Rso.update(update, function(response) {
 				$scope.rsorequestMessage = response.data.message;
 				if(response.status == 200) {

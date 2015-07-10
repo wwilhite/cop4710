@@ -7,7 +7,7 @@ app.service('Session', ['$rootScope', 'Cookie', function($rootScope, Cookie) {
 		$rootScope.firstname = data.firstname;
 		$rootScope.isCollapsed = true;
 		$rootScope.userid = data.id;
-		Cookie.put('session', data.session, null); // Only session as long as user doesn't close browser
+		// Cookie.put('session', data.session, null);
 		this.session = data.session;
 		this.role = data.role;
 		this.firstname = data.firstname;
@@ -19,7 +19,7 @@ app.service('Session', ['$rootScope', 'Cookie', function($rootScope, Cookie) {
 		this.session = null;
 		this.role = null;
 		this.firstname = null;
-		Cookie.put('session', '', -1);
+		// Cookie.put('session', '', -1);
 	};
 }]);
 
@@ -29,15 +29,15 @@ app.factory('User', ['$resource', '$base64', function($resource, $base64) {
 			return $resource('user', {}, {
 				login: {
 					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + $base64.encode(username + ':' + password)
-					}
+					// headers: {
+					// 	'Authorization': 'Basic ' + $base64.encode(username + ':' + password)
+					// }
 				}
 			});
 		},
-		event: $resource('user/events'),
-		adminevent: $resource('user/adminevent'),
-		rso: $resource('user/rsos')
+		// all events the user can attend
+		events: $resource('user/events'),
+		rsos: $resource('user/rsos')
 	};
 }]);
 
@@ -47,30 +47,30 @@ app.factory('SessionAPI', ['$resource', function($resource) {
 
 app.factory('University', ['$resource', function($resource) {
 	return {
-		resource: $resource('api/university/:id'),
-		image: $resource('api/university/image'),
-		rso: $resource('api/university/:universityid/rso/:member')
+		resource: $resource('university/:id'),
+		image: $resource('university/image'),
+		events: $resource('university/events'),
+		rso: $resource('university/:universityid/rso/:member')
 	};
 }]);
 
-// Used for helpful creation of RSOs and account information
 app.factory('GetAllUsers', ['$resource', function($resource) {
-	return $resource('api/getAllUsers');
+	return $resource('getAllUsers');
 }]);
 
 app.factory('Rso', ['$resource', function($resource) {
-	return $resource('api/rso/:rsoid', null, {
-		update: {
-			method: 'PUT'
-		}
+	return $resource('rso/:rsoid', null, {
+		// update: {
+		// 	method: 'PUT'
+		// }
 	});
 }]);
 
 app.factory('Event', ['$resource', function($resource) {
 	return {
-		resource: $resource('api/event'),
-		comment: $resource('api/event/:eventid/comment/:commentid', null, {
-			update: { method: 'PUT' }
+		resource: $resource('event'),
+		comment: $resource('event/:eventid/comment/:commentid', null, {
+			// update: { method: 'PUT' }
 		})
 	};
 }]);
@@ -98,12 +98,6 @@ app.service('Cookie', function() {
 				return c.substring(name.length,c.length);
 		}
 		return "";
-	};
-});
-
-app.filter('unsafe', function($sce) {
-	return function(val) {
-		return $sce.trustAsHtml(val);
 	};
 });
 })();
