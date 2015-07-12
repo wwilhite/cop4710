@@ -1,7 +1,7 @@
 (function() {
-var app = angular.module('Events.Controller', []);
+var app = angular.module('Public.Controller', []);
 
-app.controller('EventsController', ['$scope', 'Event', 'University', 'filterFilter', '$window', function($scope, Event, University, filterFilter, $window) {
+app.controller('PublicController', ['$scope', 'Event', 'University', 'filterFilter', '$window', function($scope, Event, University, filterFilter, $window) {
 	$scope.map = false;
 	$scope.events = [];
 	$scope.filteredEvents = [];
@@ -44,17 +44,17 @@ app.controller('EventsController', ['$scope', 'Event', 'University', 'filterFilt
 		}
 	};
 
+  // generate map
+  var mapOptions = {
+    zoom: 15,
+    center: new google.maps.LatLng(28.602432, -81.200264),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
 	Event.resource.query(function(response) {
 		$scope.events = response;
-
-		// generate map
-		var mapOptions = {
-      zoom: 15,
-      center: new google.maps.LatLng(28.602432, -81.200264),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     // Generate universities
     University.resource.query(function(response) {
@@ -77,7 +77,7 @@ app.controller('EventsController', ['$scope', 'Event', 'University', 'filterFilt
 			$scope.map.setCenter(latLng);
 
 			var check_distance = function(event) {
-				// 1000 meters radius of the users location!
+				// 1000 meter radius of the users location
 				if(2000 > google.maps.geometry.spherical.computeDistanceBetween($scope.map.center, new google.maps.LatLng(event.location_lat, event.location_lng)))
 					$scope.filteredEvents.push($scope.events[i]);
 			};

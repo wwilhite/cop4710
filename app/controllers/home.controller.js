@@ -120,18 +120,19 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
       }
     });
 
+    var mapOptions = {
+      zoom: 15,
+      center: new google.maps.LatLng(28.602432, -81.200264),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
     // This retrieves ALL events that the user is authorized to view, it will be filtered based on the drop down selector
     User.universityevent.get(function(response) {
       if(response.status == 200) {
         $scope.events = response.data;
       }
-      var mapOptions = {
-        zoom: 15,
-        center: new google.maps.LatLng(28.602432, -81.200264),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
 
-      $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
       updateMarkers(null);
     });
 

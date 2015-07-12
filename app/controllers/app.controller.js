@@ -42,7 +42,7 @@ app.directive('login', [function() {
 							case 'super': $location.url('/superHomepage'); break;
 							case 'admin': $location.url('/adminHomepage'); break;
 							case 'student': $location.url('/studentHomepage'); break;
-							default: $location.url('/events'); break;
+							default: $location.url('/public'); break;
 						}
 					} else {
 						$rootScope.loggedin = false;
@@ -92,7 +92,7 @@ app.directive('createAccount', [function() {
 							case 'super': $location.url('/superHomepage'); break;
 							case 'admin': $location.url('/adminHomepage'); break;
 							case 'student': $location.url('/studentHomepage'); break;
-							default: $location.url('/events'); break;
+							default: $location.url('/public'); break;
 						}
 					} else {
 						$scope.errorMessage_create = response.data.message;

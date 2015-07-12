@@ -1,5 +1,5 @@
 (function() {
-var app = angular.module('App', ['ngRoute', 'App.Services', 'App.Controller', 'Events.Controller', 'Super.Controller', 'Home.Controller', 'ui.tinymce', 'ui.bootstrap']);
+var app = angular.module('App', ['ngRoute', 'App.Services', 'App.Controller', 'Public.Controller', 'Super.Controller', 'Home.Controller', 'ui.tinymce', 'ui.bootstrap']);
 
 app.config(['$routeProvider', function($routeProvider) {
 	// Used to preload session data on refreshes and browser window closes
@@ -24,9 +24,9 @@ app.config(['$routeProvider', function($routeProvider) {
 		return deferred.promise;
 	};
 
-	$routeProvider.when('/events',{
-		templateUrl: 'partials/events/events.html',
-		controller: 'EventsController'
+	$routeProvider.when('/public',{
+		templateUrl: 'partials/public/public.html',
+		controller: 'PublicController'
 	}).when('/adminHomepage',{
 		templateUrl: 'partials/home.html',
 		controller: 'HomeController',
@@ -49,7 +49,7 @@ app.config(['$routeProvider', function($routeProvider) {
 			role: "student"
 		}
 	}).otherwise({
-		redirectTo: '/events'
+		redirectTo: '/public'
 	});
 }]);
 })();
