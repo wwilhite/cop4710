@@ -21,7 +21,6 @@ app.config(['$routeProvider', function($routeProvider) {
 		} else {
 			deferred.resolve(false);
 		}
-		deferred.resolve(true);
 		return deferred.promise;
 	};
 

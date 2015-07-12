@@ -30,7 +30,6 @@
             <p class="lead">Upcoming {{ university.name }} and RSO Events</p>
           </div>
           <ul class="list-group">
-            <!-- <div ng-repeat="event in events | filter:rso.name.filter"> -->
             <div ng-repeat="event in filteredEvents">
               <li class="list-group-item">
                 <p class="lead">{{ event.name }}</p>
@@ -39,7 +38,6 @@
                 <span ng-show="event.rso != null"><strong>Presenting RSO</strong> {{ event.rso }}<br></span>
                 <strong>Date: </strong> {{ event.date | date:'short':'UTC' }}<br>
                 <strong>{{ event.visibility }} Event</strong><br>
-                <!-- <strong>Location</strong> {{ event.location }}<br> -->
                 <strong>Location</strong> <a href ng-click="openInfoWindow(event.marker)">{{ event.location_name }}</a><br>
                 <strong>Type</strong> {{ event.type }}<br>
                 <span ng-hide="event.phone == null && event.email == null"><strong>Contact</strong> </span>
@@ -52,7 +50,6 @@
                   <tr ng-repeat="comment in event.comments">
                     <td>
                       <div>
-                        <!-- <button class="pull-right clearfix btn btn-success btn-sm" ng-show="comment.userid == userid">Edit</button> -->
                         <button style="margin-right: 5px;" class="pull-right clearfix btn btn-danger btn-sm" ng-show="comment.userid == userid" ng-click="deleteComment(comment, event)">Delete</button>
                       </div>
                       <p><strong>{{ comment.name }}</strong> @ {{ comment.created | date:'short':'UTC' }}<br>
@@ -101,27 +98,26 @@
               <div ng-show="rsorequests">
                 <hr>
                 <p class="lead" style="margin-bottom: 0;">RSO Requests</p>
+                <ul class="list-group" ng-show="rsorequests">
+                  <li class="list-group-item" ng-repeat="request in rsorequests">
+                    <p class="lead">{{ request.name }}</p>
+                    <p>
+                      <strong>Description: </strong><br>{{ request.description }}<br><br>
+                      <strong>Type: </strong><br>{{ request.type }} <br><br>
+                      <strong>Members: </strong><span ng-repeat="member in request.members">{{ member.name }}, </span>
+                    </p>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <button ng-click="accept(request)" class="btn btn-success btn-block">Accept</button>
+                      </div>
+                      <div class="col-sm-6">
+                        <button ng-click="reject(request)" class="btn btn-danger btn-block">Reject</button>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
-            <!-- Show rso requests if there are any! -->
-            <ul class="list-group" ng-show="rsorequests">
-              <li class="list-group-item" ng-repeat="request in rsorequests">
-                <p class="lead">{{ request.name }}</p>
-                <p>
-                  <strong>Description: </strong><br>{{ request.description }}<br><br>
-                  <strong>Type: </strong><br>{{ request.type }} <br><br>
-                  <strong>Members: </strong><span ng-repeat="member in request.members">{{ member.name }}, </span>
-                </p>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <button ng-click="accept(request)" class="btn btn-success btn-block">Accept</button>
-                  </div>
-                  <div class="col-sm-6">
-                    <button ng-click="reject(request)" class="btn btn-danger btn-block">Reject</button>
-                  </div>
-                </div>
-              </li>
-            </ul>
           </div>
           <div ng-show="role == 'admin'" class="panel-body">
             <student-rsos></student-rsos>

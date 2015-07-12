@@ -19,7 +19,7 @@
 					</div>
 				</form>
 				<p class="lead" style="margin-top: 10px;">About</p>
-				<p ng-bind-html="filterUniversity.description | unsafe"></p>
+				<p ng-bind-html="filterUniversity.description"></p>
 			</div>
 		</div>
 	</div>
@@ -30,7 +30,7 @@
 			<li class="list-group-item" ng-repeat="event in filteredEvents">
 				<div id="anchor{{ event.id }}"></div>
 				<p class="lead">{{ event.name }} {{ event.date | date:'short':'UTC' }}</p>
-				<p ng-bind-html="event.description | unsafe"></p>
+				<p ng-bind-html="event.description"></p>
 				<p>
 				<strong>University</strong> {{ event.university }}<br>
 				<span ng-show="event.rso != null"><strong>Presenting RSO</strong> {{ event.rso }}<br></span>

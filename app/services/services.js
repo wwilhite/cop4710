@@ -7,7 +7,7 @@ app.service('Session', ['$rootScope', 'Cookie', function($rootScope, Cookie) {
 		$rootScope.firstname = data.firstname;
 		$rootScope.isCollapsed = true;
 		$rootScope.userid = data.id;
-		// Cookie.put('session', data.session, null);
+		Cookie.put('session', data.session, null);
 		this.session = data.session;
 		this.role = data.role;
 		this.firstname = data.firstname;
@@ -19,7 +19,7 @@ app.service('Session', ['$rootScope', 'Cookie', function($rootScope, Cookie) {
 		this.session = null;
 		this.role = null;
 		this.firstname = null;
-		// Cookie.put('session', '', -1);
+		Cookie.put('session', '', -1);
 	};
 }]);
 
@@ -83,7 +83,6 @@ app.service('Cookie', function() {
 			var expires = "expires="+d.toUTCString();
 			document.cookie = cname + "=" + cvalue + "; " + expires;
 		} else {
-			// Short session
 			document.cookie = cname + "=" + cvalue;
 		}
 	};
