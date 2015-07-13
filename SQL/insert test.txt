@@ -1,0 +1,46 @@
+# Add location of UCF
+INSERT INTO `project`.`location` (`l_id`, `l_name`, `l_longitude`, `l_latitude`) VALUES ('1', 'UCF', '28.603', '-81.200');
+
+# Add UCF to university
+INSERT INTO `project`.`university` (`u_id`, `u_name`, `u_numstud`, `u_location`, `u_description`, `u_emaildomain`) VALUES ('1', 'UCF', '5', '1', 'University of Central Florida', 'knights.ucf.edu');
+
+# Add 5 students 
+INSERT INTO `project`.`student` (`s_id`, `s_fname`, `s_lname`, `s_uname`, `s_pw`, `s_email`, `u_id`) VALUES ('1', 'Andrew', 'McKenzie', 'AM1', '123', 'AM1@knights.ucf.edu', '1');
+INSERT INTO `project`.`student` (`s_id`, `s_fname`, `s_lname`, `s_uname`, `s_pw`, `s_email`, `u_id`) VALUES ('2', 'Andrew', 'Mendoza', 'AM2', '123', 'AM2@knights.ucf.edu', '1');
+INSERT INTO `project`.`student` (`s_id`, `s_fname`, `s_lname`, `s_uname`, `s_pw`, `s_email`, `u_id`) VALUES ('3', 'William', 'Wilhite', 'WW3', '123', 'WW3@knights.ucf.edu', '1');
+INSERT INTO `project`.`student` (`s_id`, `s_fname`, `s_lname`, `s_uname`, `s_pw`, `s_email`, `u_id`) VALUES ('4', 'John', 'Bob', 'JB4', '123', 'JB4@knights.ucf.edu', '1');
+INSERT INTO `project`.`student` (`s_id`, `s_fname`, `s_lname`, `s_uname`, `s_pw`, `s_email`, `u_id`) VALUES ('5', 'First', 'Last', 'FL5', '123', 'FL5@knights.ucf.edu', '1');
+
+# Affiliate students with university 
+INSERT INTO `project`.`su_affiliation` (`s_id`, `u_id`) VALUES ('1', '1');
+INSERT INTO `project`.`su_affiliation` (`s_id`, `u_id`) VALUES ('2', '1');
+INSERT INTO `project`.`su_affiliation` (`s_id`, `u_id`) VALUES ('3', '1');
+INSERT INTO `project`.`su_affiliation` (`s_id`, `u_id`) VALUES ('4', '1');
+INSERT INTO `project`.`su_affiliation` (`s_id`, `u_id`) VALUES ('5', '1');
+
+# Set student 2 as superadmin
+INSERT INTO `project`.`superadmin` (`s_id`) VALUES ('2');
+
+# Set student 1 as admin
+INSERT INTO `project`.`admin` (`s_id`) VALUES ('1');
+
+# Add a new test RSO
+INSERT INTO `project`.`rso` (`r_id`, `r_name`, `r_location`, `r_description`, `owner_id`) VALUES ('1', 'Test', '1', 'Testing', '1');
+
+# Add the 5 students to the RSO
+INSERT INTO `project`.`rso_member` (`s_id`, `r_id`) VALUES ('1', '1');
+INSERT INTO `project`.`rso_member` (`s_id`, `r_id`) VALUES ('2', '1');
+INSERT INTO `project`.`rso_member` (`s_id`, `r_id`) VALUES ('3', '1');
+INSERT INTO `project`.`rso_member` (`s_id`, `r_id`) VALUES ('4', '1');
+INSERT INTO `project`.`rso_member` (`s_id`, `r_id`) VALUES ('5', '1');
+
+# Create a test event
+INSERT INTO `project`.`event` (`e_id`, `e_name`, `e_description`, `e_phone`, `e_email`, `e_public`, `e_private`, `e_rso`) VALUES ('1', 'Test E', 'Testing Event', '1234', 'AM@knights.ucf.edu', '1', '0', '0');
+
+# Set the events location and time
+INSERT INTO `project`.`event_location` (`e_id`, `l_id`, `time`) VALUES ('1', '1', '2015-12-01 09:00:00');
+
+# Add a Comment to the event
+INSERT INTO `project`.`comment` (`e_id`, `s_id`, `time`, `description`) VALUES ('1', '4', '2015-7-11 06:15:12', 'Text for comment');
+
+
