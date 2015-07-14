@@ -1,0 +1,13 @@
+<p class="lead">Login</p>
+<form ng-submit="login(loginUser)" class="form-horizontal">
+	<div class="form-group">
+		<label for="loginusername" class="label-control col-sm-3">Username</label>
+		<div class="col-sm-9"><input id="loginusername" type="text" ng-model="loginUser.username" class="form-control" required></div>
+	</div>
+	<div class="form-group">
+		<label for="loginpassword" class="label-control col-sm-3">Password</label>
+		<div class="col-sm-9"><input id="loginpassword" type="password" ng-model="loginUser.password" class="form-control" required></div>
+	</div>
+	<input class="btn btn-primary btn-block" type="submit" value="Login">
+</form>
+<div class="alert alert-danger" ng-show="errorMessage_login" style="margin-top: 10px; margin-bottom: 0;">{{ errorMessage_login }}</div>

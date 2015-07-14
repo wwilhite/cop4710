@@ -19,15 +19,15 @@ app.controller('AppController', ['$rootScope', '$scope', 'SessionAPI', 'Session'
 app.directive('navigation', [function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'partials/app/navigation.html'
+		templateUrl: 'partials/app/navigation.php'
 	};
 }]);
 
 app.directive('login', [function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'partials/app/login.html',
-		controller: function($rootScope, $scope, User, Session, $location) {
+		templateUrl: 'partials/app/login.php',
+		controller: function($rootScope, $scope, Session, $location) {
 			$scope.login = function(loginUser) {
 				User.resource(loginUser.username, loginUser.password).login({}, function(data) {
 					if(data.status == 200) {
@@ -58,25 +58,41 @@ app.directive('login', [function() {
 app.directive('createAccount', [function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'partials/app/create.html',
-		controller: function($rootScope, $scope, User, Session, $location, University) {
+		templateUrl: 'partials/app/create.php',
+		controller: function($rootScope, $scope, Session, $location, $http) {
 			$scope.universities = [];
 			$scope.register = {};
 			$scope.register.role = 'student'; // default
-
-			University.resource.query(function(response) {
-				$scope.universities = response;
-				$scope.register.school = $scope.universities[0];
+			$http.get('./backend/university.php').success(function(data){
+				$scope.universities = data;
+				$scope.register.school - $scope.universities[0];
 			});
 
 			$scope.create = function(user) {
-				var email = (user.role == 'student') ? user.studentemail + user.school.email_domain : user.adminemail;
+				var email = (user.role == 'student') ? user.studentemail : user.adminemail;
 				user.email = email;
 				if(user.role == 'student') {
-					user.universityid = user.school.id;
+					user.universityid = user.school;
 				}
 
-				User.resource(null, null).save(user, function(response) {
+				var FormData = {
+					'sid' : user.sid,
+					'fname' : user.firstname,
+					'lname' : user.lastname,
+					'uname' : user.username,
+					'pass' : user.password,
+					'email' : user.email,
+					'uid' : user.universityid
+				};
+
+				$http({
+					method: 'POST',
+					url: './backend/postStudent.php',
+					data: FormData,
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				}).success(function(response){
+					$scope.message = response;
+
 					if(response.status == 200) {
 						Session.destroy(); // Clear out any old data / sessions
 						Session.create(response.data);
@@ -95,10 +111,13 @@ app.directive('createAccount', [function() {
 							default: $location.url('/public'); break;
 						}
 					} else {
-						$scope.errorMessage_create = response.data.message;
+						$scope.errorMessage_create = response.data;
 						$scope.create.submitted = true;
 					}
 				});
+
+
+				
 			};
 		}
 	};
@@ -106,7 +125,7 @@ app.directive('createAccount', [function() {
 
 app.directive("imagecarousel", function() {
 	return {
-		templateUrl: 'partials/app/imagecarousel.html'
+		templateUrl: 'partials/app/imagecarousel.php'
 	};
 });
 })();

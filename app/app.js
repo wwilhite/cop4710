@@ -25,24 +25,24 @@ app.config(['$routeProvider', function($routeProvider) {
 	};
 
 	$routeProvider.when('/public',{
-		templateUrl: 'partials/public/public.html',
+		templateUrl: 'partials/public/public.php',
 		controller: 'PublicController'
 	}).when('/adminHomepage',{
-		templateUrl: 'partials/home.html',
+		templateUrl: 'partials/home.php',
 		controller: 'HomeController',
 		resolve: {
 			authorized: authorized,
 			role: "super"
 		}
 	}).when('/leaderHomepage', {
-		templateUrl: 'partials/home.html',
+		templateUrl: 'partials/home.php',
 		controller: 'HomeController',
 		resolve: {
 			authorized: authorized,
 			role: "admin"
 		}
 	}).when('/studentHomepage',{
-		templateUrl: 'partials/home.html',
+		templateUrl: 'partials/home.php',
 		controller: 'HomeController',
 		resolve: {
 			authorized: authorized,
