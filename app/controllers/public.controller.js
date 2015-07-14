@@ -38,7 +38,6 @@ app.controller('PublicController', ['$scope', 'filterFilter', '$window', '$http'
 			new_marker($scope.filteredEvents[i]);
 		}
 
-		// go to the first marker
 		if($scope.filteredEvents[0]) {
 			google.maps.event.trigger($scope.filteredEvents[0].marker, 'click');
 		}
