@@ -4,9 +4,9 @@ var app = angular.module('App.Services', ['ngResource', 'base64', 'ui.tinymce'])
 app.service('Session', ['$rootScope', 'Cookie', function($rootScope, Cookie) {
 	this.create = function(data) {
 		$rootScope.loggedin = true;
-		$rootScope.firstname = data.firstname;
+		$rootScope.firstname = data[0].s_fname;
 		$rootScope.isCollapsed = true;
-		$rootScope.userid = data.id;
+		$rootScope.userid = data[0].s_id;
 		Cookie.put('session', data.session, null);
 		this.session = data.session;
 		this.role = data.role;

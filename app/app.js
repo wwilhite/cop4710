@@ -45,7 +45,7 @@ app.config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/home.php',
 		controller: 'HomeController',
 		resolve: {
-			authorized: authorized,
+			/*authorized: authorized,*/
 			role: "student"
 		}
 	}).otherwise({

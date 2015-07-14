@@ -42,25 +42,28 @@ app.directive('login', [function() {
 					data: LoginFormData,
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 				}).success(function(data){
-					if(data.status == 200) {
-						Session.destroy(); // Clear out any old data
-						Session.create(data.data);
+					switch(parseInt(data)) {
+							case 3: $location.url('/superHomepage'); break;
+							case 2: $location.url('/adminHomepage'); break;
+							case 1: $location.url('/studentHomepage'); break;
+							case 0: $location.url('/public'); break;
+							default: $location.url('/public'); break;
+						}
+					//if(data == 200) {
+						/*Session.destroy(); // Clear out any old data
+						Session.create(data);
 						$scope.loginUser = {};
 						$scope.errorMessage_login = false;
 						$rootScope.isCollapsed = true;
-						$rootScope.loggedin = true;
+						$rootScope.loggedin = true;*/
 						// Redirect user to respective page
-						switch(Session.role) {
-							case 'super': $location.url('/superHomepage'); break;
-							case 'admin': $location.url('/adminHomepage'); break;
-							case 'student': $location.url('/studentHomepage'); break;
-							default: $location.url('/public'); break;
-						}
-					} else {
+						// TODO: remove the switch and create if statements to determine user role
+						
+					/*} else {
 						$rootScope.loggedin = false;
-						/*$scope.errorMessage_login = data.data.message;*/
+						$scope.errorMessage_login = data.data.message;
 						$location.url("/superHomepage");
-					}
+					}*/
 
 				});
 			};
