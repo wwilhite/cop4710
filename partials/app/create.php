@@ -57,6 +57,17 @@
 		</div>
 	</div>
 
-	<input class="btn btn-success btn-block" type="submit" value="Create">
+	<input id="createButton" class="btn btn-success btn-block" type="submit" value="Create">
 </form>
 <div class="alert alert-danger" ng-show="errorMessage_create" style="margin-top: 10px; margin-bottom: 0;">{{ errorMessage_create }}</div>
+
+
+<!-- Work on getting this to clear the form on submit later -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+
+	$("#createButton").click(function(){
+		$("form")[0].reset();
+	})
+
+</script>
+

@@ -1,21 +1,3 @@
-<?php
-// Execute the query and add new student to db
-
-  if(!($result = mysqli_query($database, $newStudent))){
-    ?>
-    <h1 class = "err"><strong>Major Error:</strong></h1>
-    <p>A SQL Exception occurred while interacting with the eventwebsite database.</p>
-    <br />
-    <p>The error message was:</p>
-    
-    <p><strong><?php echo mysqli_error($database);?></strong></p>
-    
-    <p>Please try again later.</p>
-  <?php
-    die("");
-  }
-
-
 <div class="row" ng-show="createEventSuccess">
   <div class="col-sm-12">
     <div class="alert alert-success">

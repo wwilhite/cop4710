@@ -6,7 +6,7 @@ if(!($database = mysqli_connect("localhost:3306", "root", "root", "eventwebsite"
 			die("Could not reconnect to the database. Server error.");
 }
 
-$queryText = "SELECT * FROM university";
+$queryText = "SELECT * FROM university u";
 
 // get all university names from db
 $res = mysqli_query($database,$queryText);

@@ -6,7 +6,7 @@ if(!($database = mysqli_connect("localhost:3306", "root", "root", "eventwebsite"
 			die("Could not reconnect to the database. Server error.");
 }
 
-$queryText = "SELECT * FROM event";
+$queryText = "SELECT * FROM event e";
 
 // get all events from db
 $res = mysqli_query($database,$queryText);

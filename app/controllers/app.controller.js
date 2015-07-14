@@ -27,9 +27,21 @@ app.directive('login', [function() {
 	return {
 		restrict: 'E',
 		templateUrl: 'partials/app/login.php',
-		controller: function($rootScope, $scope, Session, $location) {
+		controller: function($rootScope, $scope, Session, $location, $http) {
 			$scope.login = function(loginUser) {
-				User.resource(loginUser.username, loginUser.password).login({}, function(data) {
+				/*User.resource(loginUser.username, loginUser.password).login({}, function(data)*/ 
+
+				var LoginFormData = {
+					'username' : loginUser.username,
+					'password' : loginUser.password
+				};
+
+				$http({
+					method: 'POST',
+					url: './backend/postLogin.php',
+					data: LoginFormData,
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				}).success(function(data){
 					if(data.status == 200) {
 						Session.destroy(); // Clear out any old data
 						Session.create(data.data);
@@ -46,9 +58,10 @@ app.directive('login', [function() {
 						}
 					} else {
 						$rootScope.loggedin = false;
-						$scope.errorMessage_login = data.data.message;
+						/*$scope.errorMessage_login = data.data.message;*/
 						$location.url("/superHomepage");
 					}
+
 				});
 			};
 		}
