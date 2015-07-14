@@ -102,6 +102,7 @@ CREATE TABLE event_location(
 	time datetime NOT NULL,
 	PRIMARY KEY (e_id),
 	FOREIGN KEY (l_id) REFERENCES location(l_id) ON DELETE CASCADE,
+	FOREIGN KEY (e_id) REFERENCES event(e_id) ON DELETE CASCADE,
 	CONSTRAINT loc_time UNIQUE (e_id,l_id,time)
 );
 
@@ -111,6 +112,8 @@ CREATE TABLE comment(
 	s_id int(11) NOT NULL,
 	time datetime NOT NULL,
 	description varchar(255) NOT NULL,
+	FOREIGN KEY (s_id) REFERENCES student(s_id) ON DELETE CASCADE,
+	FOREIGN KEY (e_id) REFERENCES event(e_id) ON DELETE CASCADE,
 	PRIMARY KEY (e_id, s_id, time)
 );
 
