@@ -8,10 +8,7 @@ app.controller('AppController', ['$rootScope', '$scope', 'SessionAPI', 'Session'
 		$rootScope.homepage = null;
 		$rootScope.isCollapsed = true;
 		$scope.logout = function() {
-			SessionAPI.remove({}, function(data) {
-				Session.destroy();
-				$location.url('/university');
-			});
+            Session.destroy();
 		};
 	}
 ]);
