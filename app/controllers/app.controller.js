@@ -6,6 +6,7 @@ app.controller('AppController', ['$rootScope', '$scope', '$location',
 		$rootScope.loggedin = null;
 		$rootScope.firstname = null;
 		$rootScope.homepage = null;
+		$rootScope.role = null;
 		$rootScope.isCollapsed = true;
 		$scope.logout = function() {
 			//TODO do something here...
@@ -41,11 +42,32 @@ app.directive('login', [function() {
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 				}).success(function(data){
 					switch(parseInt(data)) {
-                        case 3: $location.url('/super'); break;
-                        case 2: $location.url('/admin'); break;
-                        case 1: $location.url('/student'); break;
-                        case 0: $location.url('/public'); break;
-                        default: $location.url('/public'); break;
+                        case 3:
+							$location.url('/super');
+							$rootScope.role = "super";
+							$rootScope.homepage = "super";
+							$rootScope.loggedin = true;
+							break;
+                        case 2:
+							$location.url('/admin');
+							$rootScope.role = "admin";
+							$rootScope.homepage = "admin";
+							$rootScope.loggedin = true;
+							break;
+                        case 1:
+							$location.url('/student');
+							$rootScope.role = "student";
+							$rootScope.homepage = "student";
+							$rootScope.loggedin = true;
+							break;
+                        case 0:
+							$location.url('/public');
+							$rootScope.role = "public";
+							break;
+                        default:
+							$location.url('/public');
+							$rootScope.role = "public";
+							break;
                     }
 				});
 			};
