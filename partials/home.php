@@ -33,7 +33,7 @@
             <div ng-repeat="event in filteredEvents">
               <li class="list-group-item">
                 <p class="lead">{{ event.name }}</p>
-                <p ng-bind-html="event.description | unsafe"></p>
+                <p ng-bind-html="event.description"></p>
                 <p>
                 <span ng-show="event.rso != null"><strong>Presenting RSO</strong> {{ event.rso }}<br></span>
                 <strong>Date: </strong> {{ event.date | date:'short':'UTC' }}<br>
