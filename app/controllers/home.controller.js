@@ -185,7 +185,7 @@ app.controller('HomeController', ['$scope', 'authorized', 'User', '$modal', '$lo
     $scope.openCreateEvent = function() {
       var modalInstance = $modal.open({
         size: 'lg',
-        templateUrl: 'partials/admin/createEvent.html',
+        templateUrl: 'partials/admin/createEvent.php',
         controller: function($scope, $modalInstance, Event) {
           $scope.event = {};
           tinymce.remove(); // destroy tinyMCE to recreate it on next render 
@@ -259,7 +259,7 @@ app.controller('HomeController', ['$scope', 'authorized', 'User', '$modal', '$lo
 app.directive('availableRsos', [function() {
   return {
     restrict: 'E',
-    templateUrl: 'partials/student/availableRsos.html',
+    templateUrl: 'partials/student/availableRsos.php',
     controller: function($scope, User) {
       $scope.join = function(joinrso) {
         var rso = {
@@ -285,7 +285,7 @@ app.directive('availableRsos', [function() {
 app.directive('studentRsos', [function() {
   return {
     restrict: 'E',
-    templateUrl: 'partials/student/studentRsos.html',
+    templateUrl: 'partials/student/studentRsos.php',
     controller: function($scope, filterFilter) {
       
     }
