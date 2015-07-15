@@ -1,9 +1,9 @@
 (function() {
 var app = angular.module('Home.Controller', []);
-app.controller('HomeController', ['$scope', 'authorized', 'User', '$modal', '$location', 'filterFilter', '$window', 'Rso',
+app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$modal', '$location', 'filterFilter', '$window', 'Rso',
   function($scope, authorized, User, $modal, $location, filterFilter, $window, Rso) {
     if(!authorized) {
-      $location.url('/public');
+      $location.url('/events');
     }
 
     $scope.university = {};
@@ -185,7 +185,7 @@ app.controller('HomeController', ['$scope', 'authorized', 'User', '$modal', '$lo
     $scope.openCreateEvent = function() {
       var modalInstance = $modal.open({
         size: 'lg',
-        templateUrl: 'partials/admin/createEvent.php',
+        templateUrl: 'partials/admin/createEvent.html',
         controller: function($scope, $modalInstance, Event) {
           $scope.event = {};
           tinymce.remove(); // destroy tinyMCE to recreate it on next render 
@@ -259,7 +259,7 @@ app.controller('HomeController', ['$scope', 'authorized', 'User', '$modal', '$lo
 app.directive('availableRsos', [function() {
   return {
     restrict: 'E',
-    templateUrl: 'partials/student/availableRsos.php',
+    templateUrl: 'partials/student/availableRsos.html',
     controller: function($scope, User) {
       $scope.join = function(joinrso) {
         var rso = {
@@ -285,7 +285,7 @@ app.directive('availableRsos', [function() {
 app.directive('studentRsos', [function() {
   return {
     restrict: 'E',
-    templateUrl: 'partials/student/studentRsos.php',
+    templateUrl: 'partials/student/studentRsos.html',
     controller: function($scope, filterFilter) {
       
     }

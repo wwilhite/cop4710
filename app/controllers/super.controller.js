@@ -38,7 +38,7 @@ app.controller('SuperController', ['$scope', 'Rso',
 app.directive('addimage', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'partials/super/addimage.php',
+		templateUrl: 'partials/super/addimage.html',
 		controller: ["University", "$scope", function(University, $scope) {
 			$scope.create = function() {
 				var image = {};
@@ -57,7 +57,7 @@ app.directive('addimage', function() {
 app.directive('createProfile', function() {
 	return {
 		restrict: 'E',
-		templateUrl: 'partials/super/createProfile.php',
+		templateUrl: 'partials/super/createProfile.html',
 		controller: function($scope, University) {
 			$scope.errorMessage_createprofile = false;
 

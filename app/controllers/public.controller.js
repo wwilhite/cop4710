@@ -1,7 +1,7 @@
 (function() {
 var app = angular.module('Public.Controller', []);
 
-app.controller('PublicController', ['$scope', 'filterFilter', '$window', '$http', function($scope, filterFilter, $window, $http) {
+app.controller('PublicController', ['$scope', 'Event', 'University', 'filterFilter', '$window', function($scope, Event, University, filterFilter, $window) {
 	$scope.map = false;
 	$scope.events = [];
 	$scope.filteredEvents = [];
@@ -38,35 +38,33 @@ app.controller('PublicController', ['$scope', 'filterFilter', '$window', '$http'
 			new_marker($scope.filteredEvents[i]);
 		}
 
+		// go to the first marker
 		if($scope.filteredEvents[0]) {
 			google.maps.event.trigger($scope.filteredEvents[0].marker, 'click');
 		}
 	};
 
-	// generate map
-	var mapOptions = {
-	zoom: 15,
-	center: new google.maps.LatLng(28.602432, -81.200264),
-	mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
+  // generate map
+  var mapOptions = {
+    zoom: 15,
+    center: new google.maps.LatLng(28.602432, -81.200264),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
 
-	$scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-    // Generate events
-	$http.get('./backend/event.php').success(function(response) {
+	Event.resource.query(function(response) {
 		$scope.events = response;
-	    
-	});
 
-	// Generate universities
-    $http.get('./backend/university.php').success(function(response) {
+    // Generate universities
+    University.resource.query(function(response) {
     	$scope.universities = response;
+    	// filter defaults
+    	$scope.filterUniversity = $scope.universities[0];
+    	$scope.filteredEvents = filterFilter($scope.events, {university: $scope.filterUniversity.name});
+    	updateMarkers();
     });
-
-    // filter defaults
-	//$scope.filterUniversity = $scope.universities[0];
-	//$scope.filteredEvents = filterFilter($scope.events, {university: $scope.filterUniversity.name});
-	//updateMarkers();
+	});
 
 	$scope.getLocation = function() {
 		navigator.geolocation.getCurrentPosition(function(position) {
