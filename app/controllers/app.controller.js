@@ -1,8 +1,8 @@
 (function() {
 var app = angular.module('App.Controller', ['App.Services']);
 
-app.controller('AppController', ['$rootScope', '$scope', 'SessionAPI', 'Session', '$location',
-	function($rootScope, $scope, SessionAPI, Session, $location) {
+app.controller('AppController', ['$rootScope', '$scope', 'Session', '$location',
+	function($rootScope, $scope, Session, $location) {
 		$rootScope.loggedin = null;
 		$rootScope.firstname = null;
 		$rootScope.homepage = null;
