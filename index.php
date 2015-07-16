@@ -1,10 +1,53 @@
 <?php
 require 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
-$app = new \Slim\Slim();
-$app->get('/hello/:name', function ($name) {
-    echo "Hello, $name";
+
+$app = new \Slim\Slim(array(
+    "MODE" => "development",
+    "TEMPLATES.PATH" => "./templates"
+));
+
+//post user
+$app->add(new \Slim\Middleware\ContentTypes());
+
+$app->post("/user", function () use($app) {
+	
+	$firstname = $app->request()->put('firstname');
+	$lastname = $app->request()->put('lastname');
+	$email = $app->request()->put('email');
+	$username = $app->request()->put('username');
+	$password = $app->request()->put('password');
+	$role = $app->request()->put('role');
+	$universityid = $app->request()->put('universityid');
+	
+	if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+		die("Could not reconnect to the database. Server error.");
+	}
+	
+	$new = "INSERT INTO student (s_id,s_fname, s_lname, s_email, s_uname, s_pw, u_id) VALUES (1000,'".$firstname."','".$lastname."' ,'".$email."', '".$username."', '".$password."' ,".$universityid.")";
+	
+	if(!($result = mysqli_query($database, $new))){
+		echo mysqli_error($database);
+	}else{
+		echo "worked";
+	}
+	
 });
+
+//get user
+$app->get('/user', function () {
+	
+	echo "get user";
+	
+});
+
+$app->get('/event', function () {
+	
+	echo "get event";
+	
+});
+
+
 $app->run();
 
 ?>
