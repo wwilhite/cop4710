@@ -47,7 +47,23 @@ $app->get('/event', function () {
 	
 });
 
+$app->post("/event", function () use($app) {
 
+	echo "post university";
+	
+});
+
+$app->get('/university', function () {
+	
+	echo "get university";
+	
+});
+
+$app->post("/university", function () use($app) {
+	
+	echo "post university";
+	
+});
 $app->run();
 
 ?>

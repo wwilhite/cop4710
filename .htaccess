@@ -1,0 +1,10 @@
+RewriteEngine On
+ 
+#RewriteCond %{SCRIPT_FILENAME} !-d
+#RewriteCond %{SCRIPT_FILENAME} !-f
+ 
+RewriteRule ^university(.*)$ index.php
+RewriteRule ^student(.*)$ index.php
+RewriteRule ^event(.*)$ index.php
+
+
