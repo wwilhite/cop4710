@@ -41,7 +41,7 @@ $app->get('/user', function () use($app) {
         die("Could not reconnect to the database. Server error.");
     }
 
-    $query = sprintf("select s_id, s_fname from student where  s_uname='%s' AND s_pw='%s' limit 1", $app->request()->put("username"), $app->request()->put("password"));
+    $query = sprintf("select s_id, s_fname from student where  s_uname='%s' AND s_pw='%s' limit 1", $app->request()->get("username"), $app->request()->get("password"));
 
     $result = $database->query($query);
     if($result->num_rows > 0){
