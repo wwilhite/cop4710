@@ -22,7 +22,7 @@ $app->post("/user", function () use($app) {
         $universityid = -1;
     }
 
-    if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -38,7 +38,7 @@ $app->post("/user", function () use($app) {
 //get user
 $app->get('/user(/:username)(/:password)', function ($username, $password) use($app) {
     $response = array();
-    if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -59,20 +59,45 @@ $app->get('/user(/:username)(/:password)', function ($username, $password) use($
     }
 });
 
+// get events
 $app->get('/event', function () use($app) {
-    $e_id = $app->request()->get('e_id');
-    if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+    //$e_id = $app->request()->get('e_id');
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
-	echo "THISSTRING" . $e_id;
-	$query = sprintf("SELECT e_name, e_description, e_phone, e_email FROM event WHERE e_id = " . $e_id);
-	$result = $database->query($query);
+	//echo "THISSTRING";
+	$query = "SELECT e_name, e_description, e_phone, e_email FROM event";
+	/*$result = $database->query($query);*/
+
+    if(!($result = mysqli_query($database, $query))){
+    ?>
+        <h1 class = "err"><strong>Major Error:</strong></h1>
+        <p>A SQL Exception occurred while interacting with the eventwebsite database.</p>
+        <br />
+        <p>The error message was:</p>
+        
+        <p><strong><?php echo mysqli_error($database);?></strong></p>
+
+
+        
+        <p>Please try again later.</p>
+        <?php
+        
+        die("");
+    }
+
+    // create result array
+    $arr = array();
+
 	$app->contentType('application/json');
 
 	if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            echo json_encode($row);
+            $arr[] = $row;
 		}
+        $json_response = json_encode($arr);
+        echo $json_response;
+
 	} else {
         echo "0 results";
 	}
@@ -82,21 +107,45 @@ $app->post("/event", function () use($app) {
     echo "post university";
 });
 
+// get universities
 $app->get('/university', function () use($app) {
-    $e_id = $app->request()->get('u_id');
+    //$u_id = $app->request()->get('u_id');
 
-    if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
-	$query = sprintf("SELECT e_name, e_description, e_phone, e_email FROM event WHERE e_id = " . $e_id);
-	$result = $database->query($query);
+	$query = "SELECT * FROM university";
+	/*$result = $database->query($query);*/
+
+    if(!($result = mysqli_query($database, $query))){
+    ?>
+        <h1 class = "err"><strong>Major Error:</strong></h1>
+        <p>A SQL Exception occurred while interacting with the eventwebsite database.</p>
+        <br />
+        <p>The error message was:</p>
+        
+        <p><strong><?php echo mysqli_error($database);?></strong></p>
+
+
+        
+        <p>Please try again later.</p>
+        <?php
+        
+        die("");
+    }
+
+    // create result array
+    $arr = array();
+
 	$app->contentType('application/json');
 
 	if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            echo json_encode($row);
+            $arr[] = $row;
 		}
+        $json_response = json_encode($arr);
+        echo $json_response;
 	} else {
         echo "0 results";
 	}
