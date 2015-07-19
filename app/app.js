@@ -8,16 +8,6 @@ app.config(['$routeProvider', function($routeProvider) {
 		var deferred = $q.defer();
 		if($rootScope.loggedin) {
 			deferred.resolve(true);
-		} else if(Cookie.get('session')) {
-			SessionAPI.get(function(response) {
-				if(response.status == 200) {
-					Session.create(response.data);
-					deferred.resolve(true);
-				} else {
-					Session.destroy();
-					deferred.resolve(false);
-				}
-			});
 		} else {
 			deferred.resolve(false);
 		}
