@@ -3,7 +3,7 @@ var app = angular.module('Home.Controller', []);
 app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 'University', 'Session', '$modal', '$location', 'filterFilter', '$window', 'Rso',
   function($rootScope, $scope, authorized, User, University, Session, $modal, $location, filterFilter, $window, Rso) {
     if(!authorized) {
-      $location.url('/events');
+      $location.url('/public');
     }
 
     $scope.university = {};

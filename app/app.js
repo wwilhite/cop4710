@@ -17,13 +17,13 @@ app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/public',{
 		templateUrl: 'partials/public/public.html',
 		controller: 'PublicController'
-	}).when('/adminHomepage',{
+	}).when('/superHomepage',{
 		templateUrl: 'partials/home.html',
 		controller: 'HomeController',
 		resolve: {
 			authorized: authorized
 		}
-	}).when('/leaderHomepage', {
+	}).when('/adminHomepage', {
 		templateUrl: 'partials/home.html',
 		controller: 'HomeController',
 		resolve: {
