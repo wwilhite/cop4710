@@ -41,35 +41,59 @@ $app->get('/user', function () use($app) {
         die("Could not reconnect to the database. Server error.");
     }
 
-    $new = sprintf("select s_id, s_fname from student where  s_uname='%s' AND s_pw='%s' limit 1", $app->request()->put("username"), $app->request()->put("password"));
+    $query = sprintf("select s_id, s_fname from student where  s_uname='%s' AND s_pw='%s' limit 1", $app->request()->put("username"), $app->request()->put("password"));
 
-    $result = mysqli_query($database, $new);
-    if(!$result){
-        echo mysqli_error($database);
+    $result = $database->query($query);
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()) {
+            echo json_encode($row);
+        }
     }else{
-        echo json_encode($result->fetch_assoc());
+        echo mysqli_error($database);
     }
 });
 
 $app->get('/event', function () use($app) {
+    $e_id = $app->request()->get('e_id');
+    if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+	echo "THISSTRING" . $e_id;
+	$query = sprintf("SELECT e_name, e_description, e_phone, e_email FROM event WHERE e_id = " . $e_id);
+	$result = $database->query($query);
+	$app->contentType('application/json');
 
-    echo "get event";
-
+	if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            echo json_encode($row);
+		}
+	} else {
+        echo "0 results";
+	}
 });
 
 $app->post("/event", function () use($app) {
-
     echo "post university";
-
 });
 
 $app->get('/university', function () use($app) {
+    $e_id = $app->request()->get('u_id');
 
     if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
-    echo "get university";
 
+	$query = sprintf("SELECT e_name, e_description, e_phone, e_email FROM event WHERE e_id = " . $e_id);
+	$result = $database->query($query);
+	$app->contentType('application/json');
+
+	if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            echo json_encode($row);
+		}
+	} else {
+        echo "0 results";
+	}
 });
 
 $app->post("/university", function () use($app) {
