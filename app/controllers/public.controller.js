@@ -56,14 +56,14 @@ app.controller('PublicController', ['$scope', 'Event', 'University', 'filterFilt
 	Event.resource.query(function(response) {
 		$scope.events = response;
 
-    // Generate universities
-    University.resource.query(function(response) {
-    	$scope.universities = response;
-    	// filter defaults
-    	$scope.filterUniversity = $scope.universities[0];
-    	$scope.filteredEvents = filterFilter($scope.events, {university: $scope.filterUniversity.name});
-    	updateMarkers();
-    });
+        // Generate universities
+        University.resource.query(function(response) {
+            $scope.universities = response;
+            // filter defaults
+            $scope.filterUniversity = $scope.universities[0];
+            $scope.filteredEvents = filterFilter($scope.events, {university: $scope.filterUniversity.u_name});
+            updateMarkers();
+        });
 	});
 
 	$scope.getLocation = function() {

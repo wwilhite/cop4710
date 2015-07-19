@@ -14,12 +14,12 @@
 				<form class="form" ng-submit="updateFilter(filterUniversity)">
 					<div class="form-group">
 						<label class="label-control">University</label>
-						<select id="role" ng-model="filterUniversity" class="form-control" ng-options="university.name for university in universities">
+						<select id="role" ng-model="filterUniversity" class="form-control" ng-options="university.u_name for university in universities">
 						</select>
 					</div>
 				</form>
 				<p class="lead" style="margin-top: 10px;">About</p>
-				<p ng-bind-html="filterUniversity.description"></p>
+				<p ng-bind-html="filterUniversity.u_description"></p>
 			</div>
 		</div>
 	</div>
@@ -29,16 +29,15 @@
 		<ul class="list-group">
 			<li class="list-group-item" ng-repeat="event in filteredEvents">
 				<div id="anchor{{ event.id }}"></div>
-				<p class="lead">{{ event.name }} {{ event.date | date:'short':'UTC' }}</p>
-				<p ng-bind-html="event.description"></p>
+				<p class="lead">{{ event.e_name }} {{ event.date | date:'short':'UTC' }}</p>
+				<p ng-bind-html="event.e_description"></p>
 				<p>
 				<strong>University</strong> {{ event.university }}<br>
-				<span ng-show="event.rso != null"><strong>Presenting RSO</strong> {{ event.rso }}<br></span>
 				<strong>Location</strong> <a href ng-click="openInfoWindow(event.marker)">{{ event.location_name }}</a><br>
 				<strong>Type</strong> {{ event.type }}<br>
-				<span ng-hide="event.contactphone == null && event.contactemail == null"><strong>Contact</strong> </span>
-				<span ng-show="event.contactphone != null"><strong>Phone:</strong> {{ event.contactphone }}<br></span>
-				<span ng-show="event.contactemail != null"><strong>Email:</strong> {{ event.contactemail }}<br></span>
+				<span ng-hide="event.e_phone == null && event.e_email == null"><strong>Contact</strong> </span>
+				<span ng-show="event.e_phone != null"><strong>Phone:</strong> {{ event.e_phone }}<br></span>
+				<span ng-show="event.e_email != null"><strong>Email:</strong> {{ event.e_email }}<br></span>
 				</p>
 			</li>
 		</ul>
