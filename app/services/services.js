@@ -7,9 +7,11 @@ app.service('Session', ['$rootScope', function($rootScope) {
 		$rootScope.firstname = data.firstname;
 		$rootScope.isCollapsed = true;
 		$rootScope.userid = data.s_id;
+		$rootScope.role = data.role;
 		this.session = data.session;
 		this.role = data.role;
 		this.firstname = data.firstname;
+		this.u_id = data.u_id;
 	};
 
 	this.destroy = function() {

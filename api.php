@@ -42,21 +42,32 @@ $app->get('/user(/:username)(/:password)', function ($username, $password) use($
         die("Could not reconnect to the database. Server error.");
     }
 
-    $query = sprintf("select s_id, s_fname from student where  s_uname='%s' AND s_pw='%s' limit 1", $username, $password);
+    $query = sprintf("select s_id, s_fname, u_id from student where s_uname='%s' AND s_pw='%s' limit 1", $username, $password);
 
     $result = $database->query($query);
     $row = $result->fetch_assoc();
-    if($result->num_rows < 1) {
+    if($result->num_rows != 1) {
         echo mysqli_error($database);
-    } else if($result->num_rows > 1) {
-        echo mysqli_error($database);
-    }else{
+    } else {
         $response["s_id"] = $row["s_id"];
         $response["s_fname"] = $row["s_fname"];
-        //TODO add role
+        $response["u_id"] = $row["u_id"];
 
-        echo json_encode($response);
+        $query = sprintf("select * from superadmin where s_id='%s' limit 1", $row["s_id"]);
+        $result = $database->query($query);
+        if($result->num_rows == 1) {
+            $response["role"] = "super";
+        } else {
+            $query = sprintf("select * from admin where s_id='%s' limit 1", $row["s_id"]);
+            $result = $database->query($query);
+            if($result->num_rows == 1) {
+                $response["role"] = "admin";
+            } else {
+                $response["role"] = "student";
+            }
+        }
     }
+    echo json_encode($response);
 });
 
 $app->get('/event', function () use($app) {

@@ -21,22 +21,19 @@ app.config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/home.html',
 		controller: 'HomeController',
 		resolve: {
-			authorized: authorized,
-			role: "super"
+			authorized: authorized
 		}
 	}).when('/leaderHomepage', {
 		templateUrl: 'partials/home.html',
 		controller: 'HomeController',
 		resolve: {
-			authorized: authorized,
-			role: "admin"
+			authorized: authorized
 		}
 	}).when('/studentHomepage',{
 		templateUrl: 'partials/home.html',
 		controller: 'HomeController',
 		resolve: {
-			authorized: authorized,
-			role: "student"
+			authorized: authorized
 		}
 	}).otherwise({
 		redirectTo: '/public'

@@ -33,7 +33,7 @@
             <div ng-repeat="event in filteredEvents">
               <li class="list-group-item">
                 <p class="lead">{{ event.name }}</p>
-                <p ng-bind-html="event.description | unsafe"></p>
+                <p ng-bind-html="event.description"></p>
                 <p>
                 <span ng-show="event.rso != null"><strong>Presenting RSO</strong> {{ event.rso }}<br></span>
                 <strong>Date: </strong> {{ event.date | date:'short':'UTC' }}<br>
@@ -90,7 +90,8 @@
               <p>{{ rso.name.description }}</p>
             </div>
           </div>
-          <div ng-show="role == 'super'"class="panel panel-default">
+          <div ng-show="role === 'super'"class="panel panel-default">
+            <!--<div ng-show=""class="panel panel-default">-->
             <div class="panel-body">
               <p class="lead">University Super Admin Options</p>
               <button class="btn btn-warning btn-block" ng-click="openCreateEvent()">Create University Event</button>
@@ -119,7 +120,8 @@
               </div>
             </div>
           </div>
-          <div ng-show="role == 'admin'" class="panel-body">
+          <div ng-show="role === 'admin'" class="panel-body">
+            <!--<div ng-show="" class="panel-body">-->
             <student-rsos></student-rsos>
             <hr>
             <p class="lead">RSO Admin options</p>

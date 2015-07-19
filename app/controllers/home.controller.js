@@ -1,7 +1,7 @@
 (function() {
 var app = angular.module('Home.Controller', []);
-app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$modal', '$location', 'filterFilter', '$window', 'Rso',
-  function($scope, authorized, User, $modal, $location, filterFilter, $window, Rso) {
+app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 'University', 'Session', '$modal', '$location', 'filterFilter', '$window', 'Rso',
+  function($rootScope, $scope, authorized, User, University, Session, $modal, $location, filterFilter, $window, Rso) {
     if(!authorized) {
       $location.url('/events');
     }
@@ -83,22 +83,20 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
       }
     };
 
-    // Students receieve their events from their association with their university
-    User.university.get(function(response) {
-      if(response.status == 200) {
+    University.resource.get({u_id: Session.u_id}, function(response) {
         $scope.noProfile = false;
         $scope.university = response.data.university;
 
-        var images = response.data.images;
-        $scope.slides = [];
-        for(var i = 0; i < images.length; i++) {
-          $scope.slides.push(images[i]);
-        }
+        //var images = response.data.images;
+        //$scope.slides = [];
+        //for(var i = 0; i < images.length; i++) {
+        //  $scope.slides.push(images[i]);
+        //}
 
         University.rso.get({universityid: $scope.university.id}, function(response) {
           if(response.status == 200) {
             $scope.rsos = response.data;
-            
+
             angular.forEach($scope.rsos, function(value, key) {
               value.filter = value.name;
             });
@@ -117,7 +115,6 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
         Rso.query(function (response) {
           $scope.rsorequests = response;
         });
-      }
     });
 
     var mapOptions = {
@@ -128,7 +125,7 @@ app.controller('HomeController', ['$scope', 'authorized', 'role', 'User', '$moda
     $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     // This retrieves ALL events that the user is authorized to view, it will be filtered based on the drop down selector
-    User.universityevent.get(function(response) {
+    User.events.get({s_id: Session.s_id}, function(response) {
       if(response.status == 200) {
         $scope.events = response.data;
       }
