@@ -4,7 +4,7 @@ var app = angular.module('App', ['ngRoute', 'App.Services', 'App.Controller', 'P
 app.config(['$routeProvider', function($routeProvider) {
 	// Used to preload session data on refreshes and browser window closes
 	// NOTE: must resolve to either true or false, reject will block the view from displaying.
-	var authorized = function($rootScope, $q, Session, Cookie, SessionAPI, $location) {
+	var authorized = function($rootScope, $q, Session, Cookie, $location) {
 		var deferred = $q.defer();
 		if($rootScope.loggedin) {
 			deferred.resolve(true);

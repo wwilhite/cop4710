@@ -27,25 +27,32 @@ app.directive('login', [function() {
 		controller: function($rootScope, $scope, User, Session, $location) {
 			$scope.login = function(loginUser) {
 				User.resource(loginUser.username, loginUser.password).login({}, function(data) {
-					if(data.status == 200) {
-						Session.destroy(); // Clear out any old data
-						Session.create(data.data);
-						$scope.loginUser = {};
-						$scope.errorMessage_login = false;
-						$rootScope.isCollapsed = true;
-						$rootScope.loggedin = true;
-						// Redirect user to respective page
-						switch(Session.role) {
-							case 'super': $location.url('/superHomepage'); break;
-							case 'admin': $location.url('/adminHomepage'); break;
-							case 'student': $location.url('/studentHomepage'); break;
-							default: $location.url('/public'); break;
-						}
-					} else {
-						$rootScope.loggedin = false;
-						$scope.errorMessage_login = data.data.message;
-						$location.url("/superHomepage");
-					}
+                    Session.destroy(); // Clear out any old data
+                    Session.create(data);
+                    $scope.loginUser = {};
+                    $scope.errorMessage_login = false;
+                    $rootScope.isCollapsed = true;
+                    $rootScope.loggedin = true;
+                    // Redirect user to respective page
+                    switch(Session.role) {
+                        case 'super':
+                            $location.url('/superHomepage');
+                            break;
+                        case 'admin':
+                            $location.url('/adminHomepage');
+                            break;
+                        case 'student':
+                            $location.url('/studentHomepage');
+                            break;
+                        default:
+                            $location.url('/public');
+                            break;
+                    }
+					//} else {
+					//	$rootScope.loggedin = false;
+					//	$scope.errorMessage_login = data.data.message;
+					//	$location.url("/public");
+					//}
 				});
 			};
 		}
@@ -74,27 +81,26 @@ app.directive('createAccount', [function() {
 				}
 
 				User.resource(null, null).save(user, function(response) {
-					if(response.status == 200) {
-						Session.destroy(); // Clear out any old data / sessions
-						Session.create(response.data);
+                    Session.destroy(); // Clear out any old data / sessions
+                    Session.create(response.data);
 
-						// General clean up and reset form
-						$scope.errorMessage_create = false;
-						$scope.register = {};
-						$scope.register.school = $scope.universities[0];
-						$scope.register.role = 'student';
+                    // General clean up and reset form
+                    $scope.errorMessage_create = false;
+                    $scope.register = {};
+                    $scope.register.school = $scope.universities[0];
+                    $scope.register.role = 'student';
 
-						// Redirect newly created user to their homepage
-						switch(Session.role) {
-							case 'super': $location.url('/superHomepage'); break;
-							case 'admin': $location.url('/adminHomepage'); break;
-							case 'student': $location.url('/studentHomepage'); break;
-							default: $location.url('/public'); break;
-						}
-					} else {
-						$scope.errorMessage_create = response.data.message;
-						$scope.create.submitted = true;
-					}
+                    // Redirect newly created user to their homepage
+                    switch(Session.role) {
+                        case 'super': $location.url('/superHomepage'); break;
+                        case 'admin': $location.url('/adminHomepage'); break;
+                        case 'student': $location.url('/studentHomepage'); break;
+                        default: $location.url('/public'); break;
+                    }
+					//} else {
+					//	$scope.errorMessage_create = response.data.message;
+					//	$scope.create.submitted = true;
+					//}
 				});
 			};
 		}

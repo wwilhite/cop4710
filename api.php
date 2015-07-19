@@ -37,6 +37,7 @@ $app->post("/user", function () use($app) {
 
 //get user
 $app->get('/user', function () use($app) {
+    $response = array();
     if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
@@ -44,12 +45,15 @@ $app->get('/user', function () use($app) {
     $query = sprintf("select s_id, s_fname from student where  s_uname='%s' AND s_pw='%s' limit 1", $app->request()->get("username"), $app->request()->get("password"));
 
     $result = $database->query($query);
-    if($result->num_rows > 0){
-        while($row = $result->fetch_assoc()) {
-            echo json_encode($row);
-        }
-    }else{
+    $row = $result->fetch_assoc();
+    if($result->num_rows > 1){
         echo mysqli_error($database);
+    }else{
+        $response["s_id"] = $row["s_id"];
+        $response["s_fname"] = $row["s_fname"];
+        //TODO add role
+
+        echo json_encode($response);
     }
 });
 
