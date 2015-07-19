@@ -6,7 +6,7 @@ app.service('Session', ['$rootScope', function($rootScope) {
 		$rootScope.loggedin = true;
 		$rootScope.firstname = data.firstname;
 		$rootScope.isCollapsed = true;
-		$rootScope.userid = data.id;
+		$rootScope.userid = data.s_id;
 		this.session = data.session;
 		this.role = data.role;
 		this.firstname = data.firstname;
@@ -21,42 +21,38 @@ app.service('Session', ['$rootScope', function($rootScope) {
 	};
 }]);
 
-app.factory('User', ['$resource', '$base64', function($resource, $base64) {
+app.factory('User', ['$resource', '$base64', function($resource) {
 	return {
 		resource: function(username, password) {
-			return $resource('user', {}, {
+			return $resource('api.php/user', {}, {
 				login: {
 					method: 'GET',
 				}
 			});
 		},
-		events: $resource('user/events'),
-		rsos: $resource('user/rsos')
+		events: $resource('api.php/user/events'),
+		rsos: $resource('api.php/user/rsos')
 	};
 }]);
 
 app.factory('University', ['$resource', function($resource) {
 	return {
-		resource: $resource('university/:id'),
-		image: $resource('university/image'),
-		events: $resource('university/events'),
-		rso: $resource('university/:universityid/rso/:member')
+		resource: $resource('api.php/university/:id'),
+		image: $resource('api.php/university/image'),
+		events: $resource('api.php/university/events'),
+		rso: $resource('api.php/university/:universityid/rso/:member')
 	};
 }]);
 
-//app.factory('GetAllUsers', ['$resource', function($resource) {
-//	return $resource('getAllUsers');
-//}]);
-
 app.factory('Rso', ['$resource', function($resource) {
-	return $resource('rso/:rsoid', null, {
+	return $resource('api.php/rso/:rsoid', null, {
 	});
 }]);
 
 app.factory('Event', ['$resource', function($resource) {
 	return {
-		resource: $resource('event'),
-		comment: $resource('event/:eventid/comment/:commentid', null, {
+		resource: $resource('api.php/event'),
+		comment: $resource('api.php/event/:eventid/comment/:commentid', null, {
 		})
 	};
 }]);
