@@ -41,9 +41,28 @@ $app->get('/user', function () {
 	
 });
 
-$app->get('/event', function () {
+$app->get('/event', function () use($app){
 	
-	echo "get event";
+	$e_id = $app->request()->get('e_id');
+	
+	if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+		die("Could not reconnect to the database. Server error.");
+	}
+	echo "THISSTRING" . $e_id;
+	$query = sprintf("SELECT e_name, e_description, e_phone, e_email FROM event WHERE e_id = " . $e_id);
+	$result = $database->query($query);
+	$app->contentType('application/json');
+
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			echo json_encode($row);
+		}
+	} else {
+		echo "0 results";
+	}
+	
+	
+
 	
 });
 
