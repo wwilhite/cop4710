@@ -48,7 +48,7 @@ $app->get('/event', function () use($app){
 	if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
 		die("Could not reconnect to the database. Server error.");
 	}
-	echo "THISSTRING" . $e_id;
+
 	$query = sprintf("SELECT e_name, e_description, e_phone, e_email FROM event WHERE e_id = " . $e_id);
 	$result = $database->query($query);
 	$app->contentType('application/json');
@@ -74,7 +74,26 @@ $app->post("/event", function () use($app) {
 
 $app->get('/university', function () {
 	
-	echo "get university";
+	$e_id = $app->request()->get('u_id');
+	
+	if(!($database = mysqli_connect('localhost', 'root', 'root', 'eventwebsite'))){
+		die("Could not reconnect to the database. Server error.");
+	}
+
+	$query = sprintf("SELECT e_name, e_description, e_phone, e_email FROM event WHERE e_id = " . $e_id);
+	$result = $database->query($query);
+	$app->contentType('application/json');
+
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			echo json_encode($row);
+		}
+	} else {
+		echo "0 results";
+	}
+	
+	
+
 	
 });
 
