@@ -16,7 +16,7 @@
 		<label for="password" class="label-control col-sm-3">Password</label>
 		<div class="col-sm-9"><input id="password" type="password" ng-model="register.password" class="form-control" required></div>
 	</div>
-	<div class="form-group" ng-show="register.role == 'student'">
+	<div class="form-group">
 		<label for="emaildomain" class="label-control col-sm-3">Email</label>
 		<div class="col-sm-9">
 			<div class="input-group">
@@ -29,7 +29,7 @@
 		<label for="role" class="label-control col-sm-3">Role</label>
 		<div class="col-sm-9">
 			<select id="role" ng-model="register.role" class="form-control">
-				<option value="admin">University Admin</option>
+				<option value="super">University Admin</option>
 				<option value="student">Student</option>
 			</select>
 		</div>

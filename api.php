@@ -10,7 +10,9 @@ $app->contentType("application/json");
 //$app->add(new \Slim\Middleware\ContentTypes());
 
 $app->post("/user", function () use($app) {
+    $response = array();
     $body = json_decode($app->request()->getBody(), true);
+
     $firstname = $body["firstname"];
     $lastname = $body["lastname"];
     $email = $body["email"];
@@ -23,7 +25,7 @@ $app->post("/user", function () use($app) {
         die("Could not reconnect to the database. Server error.");
     }
 
-    $new = "INSERT INTO student (s_id,s_fname, s_lname, s_email, s_uname, s_pw, u_id) VALUES (1000,'".$firstname."','".$lastname."' ,'".$email."', '".$username."', '".$password."', (select u_id from university where u_id='".$universityid."'));";
+    $new = "INSERT INTO student (s_fname, s_lname, s_email, s_uname, s_pw, u_id) VALUES ('".$firstname."','".$lastname."' ,'".$email."', '".$username."', '".$password."', (select u_id from university where u_id='".$universityid."'));";
 
     if(!($result = mysqli_query($database, $new))){
         echo mysqli_error($database);
@@ -31,28 +33,22 @@ $app->post("/user", function () use($app) {
         // return newly created user
         $query = sprintf("select s_id, s_fname, u_id from student where s_uname='%s' AND s_pw='%s' limit 1", $username, $password);
 
+
         $result = $database->query($query);
         $row = $result->fetch_assoc();
+        $s_id = $row["s_id"];
+
+        if($role = "super") {
+            $query = "insert into superadmin (s_id) VALUES ((select s_id from student where s_id='".$s_id."'))";
+            $result = $database->query($query);
+        }
         if($result->num_rows != 1) {
             echo mysqli_error($database);
         } else {
-            $response["s_id"] = $row["s_id"];
+            $response["s_id"] = $s_id;
             $response["s_fname"] = $row["s_fname"];
             $response["u_id"] = $row["u_id"];
-
-            $query = sprintf("select * from superadmin where s_id='%s' limit 1", $row["s_id"]);
-            $result = $database->query($query);
-            if($result->num_rows == 1) {
-                $response["role"] = "super";
-            } else {
-                $query = sprintf("select * from admin where s_id='%s' limit 1", $row["s_id"]);
-                $result = $database->query($query);
-                if($result->num_rows == 1) {
-                    $response["role"] = "admin";
-                } else {
-                    $response["role"] = "student";
-                }
-            }
+            $response["role"] = $role;
         }
         echo json_encode($response);
     }
