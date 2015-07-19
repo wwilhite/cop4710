@@ -26,7 +26,7 @@ app.directive('login', [function() {
 		templateUrl: 'partials/app/login.html',
 		controller: function($rootScope, $scope, User, Session, $location) {
 			$scope.login = function(loginUser) {
-				User.resource(loginUser.username, loginUser.password).login({}, function(data) {
+				User.resource.login({username: loginUser.username, password: loginUser.password}, function(data) {
                     Session.destroy(); // Clear out any old data
                     Session.create(data);
                     $scope.loginUser = {};
@@ -80,7 +80,7 @@ app.directive('createAccount', [function() {
 					user.universityid = user.school.id;
 				}
 
-				User.resource(null, null).save(user, function(response) {
+				User.resource.save(user, function(response) {
                     Session.destroy(); // Clear out any old data / sessions
                     Session.create(response.data);
 
