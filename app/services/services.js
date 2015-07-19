@@ -17,6 +17,7 @@ app.service('Session', ['$rootScope', function($rootScope) {
 	this.destroy = function() {
 		$rootScope.loggedin = false;
 		$rootScope.firstname = false;
+		$rootScope.role = null;
 		this.session = null;
 		this.role = null;
 		this.firstname = null;

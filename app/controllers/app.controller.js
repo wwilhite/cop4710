@@ -1,14 +1,16 @@
 (function() {
 var app = angular.module('App.Controller', ['App.Services']);
 
-app.controller('AppController', ['$rootScope', '$scope', 'Session',
-	function($rootScope, $scope, Session) {
+app.controller('AppController', ['$rootScope', '$scope', 'Session', '$route',
+	function($rootScope, $scope, Session, $route) {
 		$rootScope.loggedin = null;
 		$rootScope.firstname = null;
 		$rootScope.homepage = null;
 		$rootScope.isCollapsed = true;
 		$scope.logout = function() {
             Session.destroy();
+            $location.url('/public');
+            $route.reload();
 		};
 	}
 ]);
@@ -27,7 +29,6 @@ app.directive('login', [function() {
 		controller: function($rootScope, $scope, User, Session, $location) {
 			$scope.login = function(loginUser) {
 				User.resource.login({username: loginUser.username, password: loginUser.password}, function(data) {
-                    Session.destroy(); // Clear out any old data
                     Session.create(data);
                     $scope.loginUser = {};
                     $scope.errorMessage_login = false;
@@ -73,22 +74,21 @@ app.directive('createAccount', [function() {
 				$scope.register.school = $scope.universities[0];
 			});
 
-			$scope.create = function(user) {
-				var email = (user.role == 'student') ? user.studentemail + user.school.email_domain : user.adminemail;
-				user.email = email;
-				if(user.role == 'student') {
-					user.universityid = user.school.id;
+			$scope.create = function(register) {
+				if(register.role == 'student') {
+                    register.email = register.email + register.school.u_emaildomain;
+					register.u_id = register.school.u_id;
 				}
 
-				User.resource.save(user, function(response) {
-                    Session.destroy(); // Clear out any old data / sessions
-                    Session.create(response.data);
+				User.resource.save(register, function(response) {
+                    Session.create(response);
 
                     // General clean up and reset form
                     $scope.errorMessage_create = false;
                     $scope.register = {};
                     $scope.register.school = $scope.universities[0];
                     $scope.register.role = 'student';
+                    $rootScope.loggedin = true;
 
                     // Redirect newly created user to their homepage
                     switch(Session.role) {
