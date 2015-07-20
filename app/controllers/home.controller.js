@@ -71,7 +71,7 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
       $scope.rsos = response;
 
       angular.forEach($scope.rsos, function(value, key) {
-        value.filter = value.name;
+        value.filter = value.r_name;
       });
 
       // Setup default 'filter', this will grab all university and rso events
