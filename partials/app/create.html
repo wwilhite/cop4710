@@ -21,7 +21,7 @@
 		<div class="col-sm-9">
 			<div class="input-group">
 				<input id="emaildomain" ng-model="register.email" type="text" class="form-control" aria-describedby="basic-addon">
-				<span ng-show="register.role == 'student'" class="input-group-addon" id="basic-addon">@{{ register.school.u_emaildomain }}</span>
+				<span class="input-group-addon" id="basic-addon">@{{ register.school.u_emaildomain }}</span>
 			</div>
 		</div>
 	</div>
@@ -34,7 +34,7 @@
 			</select>
 		</div>
 	</div>
-	<div class="form-group" ng-show="register.role == 'student'">
+	<div class="form-group">
 		<label for="school" class="label-control col-sm-3">School</label>
 		<div class="col-sm-9">
 			<select id="school" class="form-control" ng-model="register.school" ng-options="university.u_name for university in universities"></select>
