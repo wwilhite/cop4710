@@ -14,37 +14,21 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
     $scope.rsos = [];
     $scope.noProfile = true;
 
-    $scope.ratings = [
-      { value:1, display: '1 star'},
-      { value:2, display: '2 star'},
-      { value:3, display: '3 star'},
-      { value:4, display: '4 star'},
-      { value:5, display: '5 star'}
-    ];
     $scope.comment = {};
-    $scope.comment.rating = $scope.ratings[4];
 
     $scope.addComment = function(comment, event) {
-      comment.rating = comment.rating.value;
       comment.eventid = event.id;
       Event.comment.save({eventid: event.id}, comment, function(response) {
-        if(response.status == 200) {
           $scope.comment = {};
-          $scope.comment.rating = $scope.ratings[4];
-          event.comments.push(response.data);
-        }else{
-          $scope.comment.rating = $scope.ratings[4];
-        }
+          event.comments.push(response);
       });
     };
 
     $scope.deleteComment = function(comment, event) {
       var indexOfComment = event.comments.indexOf(comment);
       Event.comment.remove({eventid: event.id}, function(response) {
-        if(response.status == 200) {
           // splice event array where this id did exist!
           event.comments.splice(indexOfComment, 1);
-        }
       });
     };
     
@@ -83,7 +67,22 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
       }
     };
 
-    $scope.rsos = User.rsos.query({s_id: $rootScope.userid});
+    $scope.rsos = User.rsos.query({s_id: $rootScope.userid}, function (response) {
+      $scope.rsos = response;
+
+      angular.forEach($scope.rsos, function(value, key) {
+        value.filter = value.name;
+      });
+
+      // Setup default 'filter', this will grab all university and rso events
+      $scope.rsos.unshift({r_name: 'University Events', filter: null, description: 'University Events'});
+      $scope.rsos.unshift({r_name: 'All Events', filter: '', description: 'All Events & RSOs'});
+      if($scope.rsos[2].id === null) {
+        var index = $scope.rsos.indexOf($scope.rsos[2]);
+        $scope.rsos.splice(index, 1);
+      }
+      $scope.rso.name = $scope.rsos[0]; // set deafult
+    });
 
     University.resource.query({s_id: $rootScope.userid}, function(response) {
         $scope.noProfile = false;
@@ -95,22 +94,6 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
         //  $scope.slides.push(images[i]);
         //}
 
-        //University.rso.get({universityid: $scope.university.u_id}, function(response) {
-            //$scope.rsos = response.data;
-            //
-            //angular.forEach($scope.rsos, function(value, key) {
-            //  value.filter = value.name;
-            //});
-            //
-            //// Setup default 'filter', this will grab all university and rso events
-            //$scope.rsos.unshift({name: 'University Events', filter: null, description: 'University Events'});
-            //$scope.rsos.unshift({name: 'All Events', filter: '', description: 'All Events & RSOs'});
-            //if($scope.rsos[2].id === null) {
-            //  var index = $scope.rsos.indexOf($scope.rsos[2]);
-            //  $scope.rsos.splice(index, 1);
-            //}
-            //$scope.rso.name = $scope.rsos[0]; // set deafult
-        //});
 
         //Rso.query(function (response) {
         //  $scope.rsorequests = response;
@@ -126,7 +109,7 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
 
     // This retrieves ALL events that the user is authorized to view, it will be filtered based on the drop down selector
     User.events.query({s_id: Session.s_id}, function(response) {
-        $scope.events = response.data;
+        $scope.events = response;
 
       updateMarkers(null);
     });
