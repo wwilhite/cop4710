@@ -1,21 +1,8 @@
-<div class="row" ng-show="createEventSuccess">
-  <div class="col-sm-12">
-    <div class="alert alert-success">
-      {{ createEventSuccess }}
-      <button class="close" ng-click="createEventSuccess = false">&times;</button>
-    </div>
-  </div>
-</div>
 <div class="row">
   <div class="col-sm-12">
     <div class="panel panel-default">
       <div class="panel-body" ng-show="authorized">
         <h1 style="margin-top: 12px;">Welcome, {{ firstname }}</h1> 
-      </div>
-    </div>
-    <div class="row" ng-show="rsoSuccess">
-      <div class="col-sm-12">
-        <div class="alert alert-success">{{ rsoSuccess }}<button class="close" ng-click="rsoSuccess=false">&times;</button></div>
       </div>
     </div>
     <div class="row">
@@ -121,6 +108,8 @@
             <p class="lead">RSO Admin options</p>
             <button class="btn btn-warning btn-block btn-sm" ng-click="openCreateEvent()">Create RSO Event</button>
           </div>
+          <button class="btn btn-warning btn-block btn-sm" ng-click="openCreateRso()">Propose New RSO</button>
+          <available-rsos></available-rsos>
           <imagecarousel></imagecarousel>
         </div>
       </div>

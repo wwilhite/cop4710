@@ -33,7 +33,6 @@ $app->post("/user/auth", function () use($app) {
         // return newly created user
         $query = sprintf("select s_id, s_fname, u_id from student where s_uname='%s' AND s_pw='%s' limit 1", $username, $password);
 
-
         $result = $database->query($query);
         $row = $result->fetch_assoc();
         $s_id = $row["s_id"];
@@ -116,7 +115,6 @@ $app->get('/event', function () use($app) {
     if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
-	//echo "THISSTRING";
 	$query = "SELECT e_name, e_description, e_phone, e_email FROM event";
 	/*$result = $database->query($query);*/
 
@@ -163,11 +161,11 @@ $app->get('/user/events', function () use($app){
     if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
-    $query = sprintf("SELECT e_id,e_name FROM event");
-   /* $query = sprintf("SELECT e_id, e_name FROM event WHERE e_public = 1 UNION 
+//    $query = sprintf("SELECT e_id,e_name FROM event");
+    $query = sprintf("SELECT e_id, e_name FROM event WHERE e_public = 1 UNION
         (SELECT e_id, e_name FROM event WHERE e_private = 1 AND s_id = 
             (SELECT s_id FROM student WHERE u_id = 
-                    (SELECT u_id FROM student WHERE s_id = '%s') AND s_id in (SELECT * FROM admin))) ", $s_id);*/
+                    (SELECT u_id FROM student WHERE s_id = '%s') AND s_id in (SELECT * FROM admin))) ", $s_id);
 //  TODO: add RSO events to query
 
     if(!($result = $database->query($query))){
@@ -204,7 +202,6 @@ $app->get('/user/events', function () use($app){
 
 // post event
 $app->post("/event", function () use($app) {
-    $response = array();
     $body = json_decode($app->request()->getBody(), true);
 
     $e_name = $body["name"];
@@ -266,12 +263,40 @@ $app->post("/event", function () use($app) {
     if(!($result = $database->query($new))){
         echo mysqli_error($database);
     }
-    else{
-        echo "event posted" ."<br />";
-        echo "public =" .$e_public ."<br />";
-        echo "private =" .$e_private ."<br />";
-        echo "rso_id =" .$rso_id ."<br />";
+});
+
+$app->post("/rso", function () use($app) {
+    $response = array();
+    $body = json_decode($app->request()->getBody(), true);
+
+    $r_name = $body["name"];
+    $r_description = $body["description"];
+    $admin = $body["members"]["admin"];
+    $member1 = $body["members"]["member1"];
+    $member2 = $body["members"]["member2"];
+    $member3 = $body["members"]["member3"];
+    $member4 = $body["members"]["member4"];
+    $member5 = $body["members"]["member5"];
+
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
     }
+
+    $query = sprintf("select s_id from student where s_email='%s'", $admin);
+    $result = $database->query($query);
+    $row = $result->fetch_assoc();
+    $adminid = $row["s_id"];
+
+    $query = "INSERT INTO rso (owner_id, r_description, r_name, r_location) VALUES ((select s_id from student where s_email='".$admin."'), '".$r_description."', '".$r_name."', '".$r_name."')";
+    $database->query($query);
+
+    $query = "insert into rso_member (s_id, r_id)  VALUES ((select s_id from student where s_email='".$admin."'), (select r_id from rso where owner_id='".$adminid."'))";
+    $database->query($query);
+
+    $query = "insert into create_rso (s_id, r_id)  VALUES ((select s_id from student where s_email='".$admin."'), (select r_id from rso where owner_id='".$adminid."'))";
+    $database->query($query);
+
+    mysqli_close($database);
 });
 
 $app->get("/event/comment(/:e_id)", function ($e_id) use($app) {

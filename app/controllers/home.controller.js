@@ -170,7 +170,7 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
       var modalInstance = $modal.open({
         size: 'lg',
         templateUrl: 'partials/admin/createEvent.html',
-        controller: function($scope, $modalInstance, Event) {
+        controller: function($scope, $modalInstance, Event, $rootScope) {
           $scope.event = {};
           tinymce.remove(); // destroy tinyMCE to recreate it on next render 
           $scope.types = [
@@ -223,19 +223,36 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
 
             insert.date = mysql_datetime;
             Event.resource.save(insert, function(response) {
-              if(response.status == 200) {
                 $scope.event = {};
                 $scope.event.type = $scope.types[0];
                 $scope.event.visibility = $scope.visibilities[0];
                 $scope.createEventError = false;
                 $scope.$parent.createEventSuccess = response.data.message;
                 $modalInstance.close();
-              } else {
-                $scope.createEventError = response.data.message;
-              }
             });
           };
         } 
+      });
+    };
+
+    $scope.openCreateRso = function() {
+      var modalInstance = $modal.open({
+        size: 'lg',
+        templateUrl: 'partials/student/rsorequest.html',
+        controller: function($scope, $modalInstance) {
+          $scope.rsop = {};  // this is set within the view
+
+          $scope.close = function() {
+            $modalInstance.close();
+          };
+
+          $scope.rsoCreate = function(rsop) {
+            Rso.save(rsop, function(response) {
+                $scope.rsop = {};
+                $modalInstance.close();
+            });
+          };
+        }
       });
     };
   }
