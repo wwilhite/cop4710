@@ -76,7 +76,7 @@ app.directive('createAccount', [function() {
 
 			$scope.create = function(register) {
 				if(register.role == 'student') {
-                    register.email = register.email + register.school.u_emaildomain;
+                    register.email = register.email + "@" + register.school.u_emaildomain;
 					register.u_id = register.school.u_id;
 				} else {
                     register.u_id = -1;
