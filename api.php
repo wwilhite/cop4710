@@ -132,6 +132,54 @@ $app->get('/event', function () use($app) {
 	}
 });
 
+// get all events a user can see
+$app->get('/user/events', function () use($app){
+    // get s_id of user
+    $s_id = $app->request()->get('s_id');
+
+
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+    $query = sprinf("SELECT e_id,e_name FROM event");
+   /* $query = sprintf("SELECT e_id, e_name FROM event WHERE e_public = 1 UNION 
+        (SELECT e_id, e_name FROM event WHERE e_private = 1 AND s_id = 
+            (SELECT s_id FROM student WHERE u_id = 
+                    (SELECT u_id FROM student WHERE s_id = '%s') AND s_id in (SELECT * FROM admin))) ", $s_id);*/
+//  TODO: add RSO events to query
+
+    if(!($result = $database->query($query))){
+    ?>
+        <h1 class = "err"><strong>Major Error:</strong></h1>
+        <p>A SQL Exception occurred while interacting with the eventwebsite database.</p>
+        <br />
+        <p>The error message was:</p>
+        <p><strong><?php echo mysqli_error($database);?></strong></p>
+        <p>Please try again later.</p>
+        <?php
+        
+        die("");
+    }
+
+    // create result array
+    $arr = array();
+
+    $app->contentType('application/json');
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $arr[] = $row;
+        }
+        $json_response = json_encode($arr);
+        echo $arr;
+
+    } else {
+        echo "0 results";
+    }
+
+});
+
+
 $app->post("/event", function () use($app) {
     echo "post university";
 });
