@@ -205,6 +205,7 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
           $scope.create = function(rsop) {
             // Fix type and visibility
             var insert = rsop;
+            insert.sid = $rootScope.userid;
             insert.visibility = rsop.visibility.value;
             insert.type = rsop.type.value;
             // time and date must be convereted

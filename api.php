@@ -38,7 +38,7 @@ $app->post("/user/auth", function () use($app) {
         $row = $result->fetch_assoc();
         $s_id = $row["s_id"];
 
-        if($role = "super") {
+        if($role == "super") {
             $query = "insert into superadmin (s_id) VALUES ((select s_id from student where s_id='".$s_id."'))";
             $result = $database->query($query);
         }
@@ -186,6 +186,8 @@ $app->get('/user/events', function () use($app){
     // create result array
     $arr = array();
 
+    $app->contentType('application/json');
+
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $arr[] = $row;
@@ -212,23 +214,28 @@ $app->post("/event", function () use($app) {
     $e_description = $body["description"];
     $e_phone = $body["contactphone"];
     $e_email = $body["contactemail"];
-    $e_public = null;
-    $e_private = null;
-    $rso_id = null;
+    $e_public = NULL;
+    $e_private = NULL;
+    $rso_id = NULL;
     $e_lat = $body["location_lat"];
-    $e_lng = $body["location.lng"];
+    $e_lng = $body["location_lng"];
     $s_id = $body["sid"];
 
+    // connect to db
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+
     // set public, private or rso
-    if($e_visibility = "public"){
+    if($e_visibility == "public"){
         $e_public = 1;
     }
 
-    if($e_visibility = "rso") {
+    if($e_visibility == "rso") {
         $e_public = 0;
         $e_private = 0;
         // get rso_id
-        $find_rsoid = sprinf("SELECT r_id FROM rso WHERE s_id = %u",$s_id);
+        $find_rsoid = sprintf("SELECT r_id FROM rso WHERE owner_id = %u",$s_id);
         if(!($result = $database->query($find_rsoid))){
             echo mysqli_error($database);
         }
@@ -238,7 +245,7 @@ $app->post("/event", function () use($app) {
         }
     }
 
-    if($e_visibility = "student"){
+    if($e_visibility == "student"){
         $e_public = 0;
         $e_private = 1;
     }
@@ -253,19 +260,17 @@ $app->post("/event", function () use($app) {
         $u_id = $row["u_id"];
     }
 
-    // connect to db
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
-        die("Could not reconnect to the database. Server error.");
-    }
-
     // build insert query
-    $new = sprintf("INSERT INTO event (e_name,e_description,e_phone,e_email,e_public,e_private,e_rso,s_id) VALUES ('%s','%s','%s','%s',%u,%u,%u,%u,%u)",$e_name,$e_description,$e_phone,$e_email,$e_public,$e_private,$e_rso,$s_id);
+    $new = sprintf("INSERT INTO event (e_name,e_description,e_phone,e_email,e_public,e_private,e_rso,s_id) VALUES ('%s','%s','%s','%s',%u,%u,%u,%u)",$e_name,$e_description,$e_phone,$e_email,$e_public,$e_private,$rso_id,$s_id);
 
     if(!($result = $database->query($new))){
         echo mysqli_error($database);
     }
     else{
-        echo "event posted";
+        echo "event posted" ."<br />";
+        echo "public =" .$e_public ."<br />";
+        echo "private =" .$e_private ."<br />";
+        echo "rso_id =" .$rso_id ."<br />";
     }
 });
 
