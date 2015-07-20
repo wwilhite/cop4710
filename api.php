@@ -200,7 +200,7 @@ $app->get('/user/events', function () use($app){
     mysqli_close($database);
 });
 
-});
+
 
 // post event
 $app->post("/event", function () use($app) {
