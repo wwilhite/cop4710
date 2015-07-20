@@ -98,10 +98,12 @@ $app->get("/user/rsos(/:s_id)", function ($s_id) use($app) {
 
     $result = $database->query($query);
     $row = $result->fetch_assoc();
-    if($result->num_rows != 1) {
-        echo mysqli_error($database);
-    } else {
+    if($result->num_rows > 1) {
         echo json_encode($row);
+    } else {
+        $single = array();
+        $single[0] = $row;
+        echo json_encode($single);
     }
 });
 
@@ -157,7 +159,7 @@ $app->get('/user/events', function () use($app){
     if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
-    $query = sprinf("SELECT e_id,e_name FROM event");
+    $query = sprintf("SELECT e_id,e_name FROM event");
    /* $query = sprintf("SELECT e_id, e_name FROM event WHERE e_public = 1 UNION 
         (SELECT e_id, e_name FROM event WHERE e_private = 1 AND s_id = 
             (SELECT s_id FROM student WHERE u_id = 
@@ -187,7 +189,7 @@ $app->get('/user/events', function () use($app){
             $arr[] = $row;
         }
         $json_response = json_encode($arr);
-        echo $arr;
+        echo $json_response;
 
     } else {
         echo "0 results";

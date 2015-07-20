@@ -32,17 +32,17 @@
           <ul class="list-group">
             <div ng-repeat="event in filteredEvents">
               <li class="list-group-item">
-                <p class="lead">{{ event.name }}</p>
-                <p ng-bind-html="event.description"></p>
+                <p class="lead">{{ event.e_name }}</p>
+                <p ng-bind-html="event.e_description"></p>
                 <p>
-                <span ng-show="event.rso != null"><strong>Presenting RSO</strong> {{ event.rso }}<br></span>
+                <span ng-show="event.e_rso != null"><strong>Presenting RSO</strong> {{ event.e_rso }}<br></span>
                 <strong>Date: </strong> {{ event.date | date:'short':'UTC' }}<br>
                 <strong>{{ event.visibility }} Event</strong><br>
                 <strong>Location</strong> <a href ng-click="openInfoWindow(event.marker)">{{ event.location_name }}</a><br>
                 <strong>Type</strong> {{ event.type }}<br>
-                <span ng-hide="event.phone == null && event.email == null"><strong>Contact</strong> </span>
-                <span ng-show="event.phone != null"><strong>Phone:</strong> {{ event.phone }}<br></span>
-                <span ng-show="event.email != null"><strong>Email:</strong> {{ event.email }}<br></span>
+                <span ng-hide="event.e_phone == null && event.e_email == null"><strong>Contact</strong> </span>
+                <span ng-show="event.e_phone != null"><strong>Phone:</strong> {{ event.e_phone }}<br></span>
+                <span ng-show="event.e_email != null"><strong>Email:</strong> {{ event.e_email }}<br></span>
                 <strong>Rating: </strong> {{ event.rating | number:1 }} stars
                 </p>
                 <p class="lead">Comments</p>
@@ -82,12 +82,12 @@
               <div class="form">
                 <div class="form-group">
                   <label for="rso" class="label-control">RSOs</label>
-                  <select class="form-control" id="rso" ng-model="rso.name" ng-options="rso.name for rso in rsos"></select>
+                  <select class="form-control" id="rso" ng-model="rso.name" ng-options="rso.r_name for rso in rsos"></select>
                 </div>
               </div>
               <p class="lead">About</p>
               <hr>
-              <p>{{ rso.name.description }}</p>
+              <p>{{ rso.name.r_description }}</p>
             </div>
           </div>
           <div ng-show="role === 'super'"class="panel panel-default">

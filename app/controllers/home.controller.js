@@ -83,9 +83,7 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
       }
     };
 
-    User.rsos.query({s_id: $rootScope.userid}, function(response) {
-      console.log(response);
-    });
+    $scope.rsos = User.rsos.query({s_id: $rootScope.userid});
 
     University.resource.query({s_id: $rootScope.userid}, function(response) {
         $scope.noProfile = false;
@@ -128,9 +126,7 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
 
     // This retrieves ALL events that the user is authorized to view, it will be filtered based on the drop down selector
     User.events.query({s_id: Session.s_id}, function(response) {
-      if(response.status == 200) {
         $scope.events = response.data;
-      }
 
       updateMarkers(null);
     });
