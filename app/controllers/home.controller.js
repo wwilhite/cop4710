@@ -1,7 +1,7 @@
 (function() {
 var app = angular.module('Home.Controller', []);
-app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 'University', 'Session', '$modal', '$location', 'filterFilter', '$window', 'Rso',
-  function($rootScope, $scope, authorized, User, University, Session, $modal, $location, filterFilter, $window, Rso) {
+app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 'University', 'Session', '$modal', '$location', 'filterFilter', '$window', 'Rso', 'Event',
+  function($rootScope, $scope, authorized, User, University, Session, $modal, $location, filterFilter, $window, Rso, Event) {
     if(!authorized) {
       $location.url('/public');
     }
@@ -17,8 +17,9 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
     $scope.comment = {};
 
     $scope.addComment = function(comment, event) {
-      comment.eventid = event.id;
-      Event.comment.save({eventid: event.id}, comment, function(response) {
+      comment.e_id = event.e_id;
+      comment.s_id = $rootScope.userid;
+      Event.comment.save(comment, function(response) {
           $scope.comment = {};
           event.comments.push(response);
       });
@@ -110,6 +111,10 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
     // This retrieves ALL events that the user is authorized to view, it will be filtered based on the drop down selector
     User.events.query({s_id: Session.s_id}, function(response) {
         $scope.events = response;
+      var i;
+      for(i = 0; i < $scope.events.length; i++) {
+        $scope.events[i].comments = Event.comment.query({e_id: $scope.events[i].e_id});
+      }
 
       updateMarkers(null);
     });

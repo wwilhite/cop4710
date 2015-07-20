@@ -186,8 +186,6 @@ $app->get('/user/events', function () use($app){
     // create result array
     $arr = array();
 
-    $app->contentType('application/json');
-
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $arr[] = $row;
@@ -203,6 +201,57 @@ $app->get('/user/events', function () use($app){
 
 $app->post("/event", function () use($app) {
     echo "post university";
+});
+
+$app->get("/event/comment(/:e_id)", function ($e_id) use($app) {
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+
+    $query = sprintf("select * from comment where e_id='%s'", $e_id);
+
+    $result = $database->query($query);
+    $response = array();
+    if($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $response[] = $row;
+        }
+    } else {
+        $response[] = null;
+    }
+    echo json_encode($response);
+    mysqli_close($database);
+});
+
+$app->post("/event/comment", function () use($app) {
+    $response = array();
+    $body = json_decode($app->request()->getBody(), true);
+
+    $e_id = $body["e_id"];
+    $s_id = $body["s_id"];
+//    $time = $body["time"];
+    $description = $body["description"];
+
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+
+    $query = "INSERT INTO comment (e_id, s_id, description) VALUES ((select e_id from event where e_id='".$e_id."'), (select s_id from student where s_id='".$s_id."'), '".$description."')";
+//    $query = "INSERT INTO comment (e_id, s_id, time, description) VALUES ((select e_id from event where e_id='".$e_id."'), (select s_id from student where s_id='".$s_id."'), '".$time."', '".$description."')";
+    $database->query($query);
+
+    $query = sprintf("select s_uname from student where s_id='%s'", $s_id);
+    $result = $database->query($query);
+    $row = $result->fetch_assoc();
+
+    $response["e_id"] = $e_id;
+    $response["s_id"] = $s_id;
+//    $response["s_name"] = $row["s_uname"];
+//    $response["time"] = $time;
+    $response["description"] = $description;
+
+    echo json_encode($response);
+    mysqli_close($database);
 });
 
 // get universities

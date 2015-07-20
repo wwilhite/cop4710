@@ -53,8 +53,7 @@ app.factory('Rso', ['$resource', function($resource) {
 app.factory('Event', ['$resource', function($resource) {
 	return {
 		resource: $resource('api.php/event'),
-		comment: $resource('api.php/event/:eventid/comment/:commentid', null, {
-		})
+		comment: $resource('api.php/event/comment/:e_id')
 	};
 }]);
 })();
