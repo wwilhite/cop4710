@@ -1,6 +1,20 @@
 # eventwebsite.sql
 
-# student 
+# university
+# TODO: create trigger to update u_numstud whenever new student is created
+# may change to DEFAULT 0 later
+CREATE TABLE university(
+	u_id int(11) NOT NULL AUTO_INCREMENT,
+	u_name varchar(30) NOT NULL,
+	u_numstud int(11) NOT NULL DEFAULT 0 ,
+	u_location varchar(50),
+	u_description varchar(255),
+	u_emaildomain varchar(20) NOT NULL,
+	PRIMARY KEY (u_id),
+	UNIQUE (u_emaildomain)
+);
+
+# student
 CREATE TABLE student(
 	s_id int(11) NOT NULL AUTO_INCREMENT,
 	s_fname varchar(30) NOT NULL,
@@ -27,20 +41,6 @@ CREATE TABLE admin(
 	s_id int(11) NOT NULL,
 	PRIMARY KEY (s_id),
 	FOREIGN KEY (s_id) REFERENCES student(s_id) ON DELETE CASCADE
-);
-
-# university
-# TODO: create trigger to update u_numstud whenever new student is created
-# may change to DEFAULT 0 later
-CREATE TABLE university(
-	u_id int(11) NOT NULL AUTO_INCREMENT,
-	u_name varchar(30) NOT NULL,
-	u_numstud int(11) NOT NULL DEFAULT 0 , 
-	u_location varchar(50),
-	u_description varchar(255),
-	u_emaildomain varchar(20) NOT NULL,
-	PRIMARY KEY (u_id),
-	UNIQUE (u_emaildomain)
 );
 
 # su_affliation (student-university)

@@ -21,7 +21,7 @@ $app->post("/user/auth", function () use($app) {
     $role = $body["role"];
     $universityid = $body["u_id"];
 
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -57,7 +57,7 @@ $app->post("/user/auth", function () use($app) {
 //get user
 $app->get('/user/auth(/:username)(/:password)', function ($username, $password) use($app) {
     $response = array();
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -91,7 +91,7 @@ $app->get('/user/auth(/:username)(/:password)', function ($username, $password) 
 });
 
 $app->get("/user/rsos(/:s_id)", function ($s_id) use($app) {
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -112,7 +112,7 @@ $app->get("/user/rsos(/:s_id)", function ($s_id) use($app) {
 // get events
 $app->get('/event', function () use($app) {
     //$e_id = $app->request()->get('e_id');
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 	$query = "SELECT e_name, e_description, e_phone, e_email FROM event";
@@ -158,7 +158,7 @@ $app->get('/user/events', function () use($app){
     $s_id = $app->request()->get('s_id');
 
 
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 //    $query = sprintf("SELECT e_id,e_name FROM event");
@@ -221,7 +221,7 @@ $app->post("/event", function () use($app) {
     $s_id = $body["sid"];
 
     // connect to db
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -315,8 +315,27 @@ $app->post("/event", function () use($app) {
     mysqli_close($database);
 });
 
-$app->post("/rso", function () use($app) {
+$app->get("/rso(/:s_id)", function ($s_id) use($app) {
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+
+    $query = sprintf("select * from rso where r_id!=(SELECT r_id FROM rso_member where s_id='%s')", $s_id);
+
+    $result = $database->query($query);
     $response = array();
+    if($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $response[] = $row;
+        }
+    } else {
+        $response[] = null;
+    }
+    echo json_encode($response);
+    mysqli_close($database);
+});
+
+$app->post("/rso", function () use($app) {
     $body = json_decode($app->request()->getBody(), true);
 
     $r_name = $body["name"];
@@ -328,7 +347,7 @@ $app->post("/rso", function () use($app) {
     $member4 = $body["members"]["member4"];
     $member5 = $body["members"]["member5"];
 
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -345,12 +364,10 @@ $app->post("/rso", function () use($app) {
 
     $query = "insert into create_rso (s_id, r_id)  VALUES ((select s_id from student where s_email='".$admin."'), (select r_id from rso where owner_id='".$adminid."'))";
     $database->query($query);
-
-    mysqli_close($database);
 });
 
 $app->get("/event/comment(/:e_id)", function ($e_id) use($app) {
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -378,7 +395,7 @@ $app->post("/event/comment", function () use($app) {
 //    $time = $body["time"];
     $description = $body["description"];
 
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 
@@ -404,7 +421,7 @@ $app->post("/event/comment", function () use($app) {
 $app->get('/university', function () use($app) {
     //$u_id = $app->request()->get('u_id');
 
-    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+    if(!($database = mysqli_connect('localhost:3306', 'root', '', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
     }
 

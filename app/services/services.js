@@ -46,8 +46,9 @@ app.factory('University', ['$resource', function($resource) {
 }]);
 
 app.factory('Rso', ['$resource', function($resource) {
-	return $resource('api.php/rso/:rsoid', null, {
-	});
+	return {
+		resource: $resource('api.php/rso/:s_id')
+	};
 }]);
 
 app.factory('Event', ['$resource', function($resource) {

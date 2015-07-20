@@ -247,9 +247,10 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
           };
 
           $scope.rsoCreate = function(rsop) {
-            Rso.save(rsop, function(response) {
+            Rso.resource.save(rsop, function(response) {
                 $scope.rsop = {};
                 $modalInstance.close();
+              $scope.available_rsos = Rso.resource.query({s_id: $rootScope.userid});
             });
           };
         }
@@ -262,7 +263,8 @@ app.directive('availableRsos', [function() {
   return {
     restrict: 'E',
     templateUrl: 'partials/student/availableRsos.html',
-    controller: function($scope, User) {
+    controller: function($scope, User, Rso, $rootScope) {
+      $scope.available_rsos = Rso.resource.query({s_id: $rootScope.userid});
       $scope.join = function(joinrso) {
         var rso = {
           rsoid: joinrso.name.id

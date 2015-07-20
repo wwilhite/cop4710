@@ -49,11 +49,6 @@ app.directive('login', [function() {
                             $location.url('/public');
                             break;
                     }
-					//} else {
-					//	$rootScope.loggedin = false;
-					//	$scope.errorMessage_login = data.data.message;
-					//	$location.url("/public");
-					//}
 				});
 			};
 		}
@@ -97,10 +92,6 @@ app.directive('createAccount', [function() {
                         case 'student': $location.url('/studentHomepage'); break;
                         default: $location.url('/public'); break;
                     }
-					//} else {
-					//	$scope.errorMessage_create = response.data.message;
-					//	$scope.create.submitted = true;
-					//}
 				});
 			};
 		}
