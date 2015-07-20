@@ -199,8 +199,74 @@ $app->get('/user/events', function () use($app){
 });
 
 
+
+// post event
 $app->post("/event", function () use($app) {
-    echo "post university";
+    $response = array();
+    $body = json_decode($app->request()->getBody(), true);
+
+    $e_name = $body["name"];
+    $e_type = $body["type"];
+    $e_visibility = $body["visibility"];
+    $e_date = $body["date"];
+    $e_description = $body["description"];
+    $e_phone = $body["contactphone"];
+    $e_email = $body["contactemail"];
+    $e_public = null;
+    $e_private = null;
+    $rso_id = null;
+    $e_lat = $body["location_lat"];
+    $e_lng = $body["location.lng"];
+    $s_id = $body["sid"];
+
+    // set public, private or rso
+    if($e_visibility = "public"){
+        $e_public = 1;
+    }
+
+    if($e_visibility = "rso") {
+        $e_public = 0;
+        $e_private = 0;
+        // get rso_id
+        $find_rsoid = sprinf("SELECT r_id FROM rso WHERE s_id = %u",$s_id);
+        if(!($result = $database->query($find_rsoid))){
+            echo mysqli_error($database);
+        }
+        else{
+            $row = $result->fetch_assoc();
+            $rso_id = $row["r_id"];
+        }
+    }
+
+    if($e_visibility = "student"){
+        $e_public = 0;
+        $e_private = 1;
+    }
+
+    // query university id
+    $find_u = sprintf("SELECT u_id FROM student WHERE s_id = %u",$s_id);
+    if(!($result = $database->query($find_u))){
+        echo mysqli_error($database);
+    }
+    else{
+        $row = $result->fetch_assoc();
+        $u_id = $row["u_id"];
+    }
+
+    // connect to db
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+
+    // build insert query
+    $new = sprintf("INSERT INTO event (e_name,e_description,e_phone,e_email,e_public,e_private,e_rso,s_id) VALUES ('%s','%s','%s','%s',%u,%u,%u,%u,%u)",$e_name,$e_description,$e_phone,$e_email,$e_public,$e_private,$e_rso,$s_id);
+
+    if(!($result = $database->query($new))){
+        echo mysqli_error($database);
+    }
+    else{
+        echo "event posted";
+    }
 });
 
 $app->get("/event/comment(/:e_id)", function ($e_id) use($app) {
