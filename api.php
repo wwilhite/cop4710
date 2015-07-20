@@ -202,6 +202,7 @@ $app->get('/user/events', function () use($app){
 
 // post event
 $app->post("/event", function () use($app) {
+    $response = array();
     $body = json_decode($app->request()->getBody(), true);
 
     $e_name = $body["name"];
@@ -214,6 +215,7 @@ $app->post("/event", function () use($app) {
     $e_public = NULL;
     $e_private = NULL;
     $rso_id = NULL;
+    $loc_name = $body["location"];
     $e_lat = $body["location_lat"];
     $e_lng = $body["location_lng"];
     $s_id = $body["sid"];
@@ -257,12 +259,60 @@ $app->post("/event", function () use($app) {
         $u_id = $row["u_id"];
     }
 
+    // add location to db
+    $newloc = sprintf("INSERT INTO location (l_name,l_longitude,l_latitude) VALUES ('%s','%s','%s')",$loc_name,$e_lng,$e_lat);
+
+    if(!($result = $database->query($newloc))){
+        echo mysqli_error($database);
+    }
+    else{
+        echo "New location added.";
+        // get new event id
+        $id = sprintf("SELECT LAST_INSERT_ID()");
+
+        if(!($result = $database->query($id))){
+            echo mysqli_error($database);
+        }
+        else{
+            $row = mysqli_fetch_row($result);
+            $l_id = $row[0];
+        }
+    }
+
     // build insert query
     $new = sprintf("INSERT INTO event (e_name,e_description,e_phone,e_email,e_public,e_private,e_rso,s_id) VALUES ('%s','%s','%s','%s',%u,%u,%u,%u)",$e_name,$e_description,$e_phone,$e_email,$e_public,$e_private,$rso_id,$s_id);
 
     if(!($result = $database->query($new))){
         echo mysqli_error($database);
     }
+    else{
+        echo "event posted" ."<br />";
+        echo "public =" .$e_public ."<br />";
+        echo "private =" .$e_private ."<br />";
+        echo "rso_id =" .$rso_id ."<br />";
+        // get new event id
+        $id = sprintf("SELECT LAST_INSERT_ID()");
+
+        if(!($result = $database->query($id))){
+            echo mysqli_error($database);
+        }
+        else{
+            $row = mysqli_fetch_row($result);
+            $e_id = $row[0];
+        }
+    }
+
+    // connect location to event
+    $assoc_loc = "INSERT INTO event_location (e_id,l_id,time) VALUES (" .$e_id ."," .$l_id .",'" .$e_date ."')";//,$e_id,$l_id,$e_date);
+
+    if(!($result = $database->query($assoc_loc))){
+        echo mysqli_error($database);
+    }
+    else{
+        echo "Location tied to event.";
+    }
+
+    mysqli_close($database);
 });
 
 $app->post("/rso", function () use($app) {
