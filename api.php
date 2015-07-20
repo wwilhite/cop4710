@@ -9,7 +9,7 @@ $app->contentType("application/json");
 //post user
 //$app->add(new \Slim\Middleware\ContentTypes());
 
-$app->post("/user", function () use($app) {
+$app->post("/user/auth", function () use($app) {
     $response = array();
     $body = json_decode($app->request()->getBody(), true);
 
@@ -55,7 +55,7 @@ $app->post("/user", function () use($app) {
 });
 
 //get user
-$app->get('/user(/:username)(/:password)', function ($username, $password) use($app) {
+$app->get('/user/auth(/:username)(/:password)', function ($username, $password) use($app) {
     $response = array();
     if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
         die("Could not reconnect to the database. Server error.");
@@ -87,6 +87,22 @@ $app->get('/user(/:username)(/:password)', function ($username, $password) use($
         }
     }
     echo json_encode($response);
+});
+
+$app->get("/user/rsos(/:s_id)", function ($s_id) use($app) {
+    if(!($database = mysqli_connect('localhost:3306', 'root', 'root', 'eventwebsite'))){
+        die("Could not reconnect to the database. Server error.");
+    }
+
+    $query = sprintf("select * from rso where r_id=(select r_id from rso_member where s_id ='%s')", $s_id);
+
+    $result = $database->query($query);
+    $row = $result->fetch_assoc();
+    if($result->num_rows != 1) {
+        echo mysqli_error($database);
+    } else {
+        echo json_encode($row);
+    }
 });
 
 // get events

@@ -26,13 +26,13 @@ app.service('Session', ['$rootScope', function($rootScope) {
 
 app.factory('User', ['$resource', '$base64', function($resource) {
 	return {
-        resource: $resource('api.php/user/:username/:password', {}, {
+        resource: $resource('api.php/user/auth/:username/:password', {}, {
             login: {
                 method: 'GET'
             }
         }),
 		events: $resource('api.php/user/events'),
-		rsos: $resource('api.php/user/rsos')
+		rsos: $resource('api.php/user/rsos/:s_id')
 	};
 }]);
 

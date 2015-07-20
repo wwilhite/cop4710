@@ -83,9 +83,13 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
       }
     };
 
-    University.resource.get({u_id: Session.u_id}, function(response) {
+    User.rsos.query({s_id: $rootScope.userid}, function(response) {
+      console.log(response);
+    });
+
+    University.resource.query({s_id: $rootScope.userid}, function(response) {
         $scope.noProfile = false;
-        $scope.university = response.data.university;
+        $scope.university = response[0];
 
         //var images = response.data.images;
         //$scope.slides = [];
@@ -93,28 +97,26 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
         //  $scope.slides.push(images[i]);
         //}
 
-        University.rso.get({universityid: $scope.university.id}, function(response) {
-          if(response.status == 200) {
-            $scope.rsos = response.data;
+        //University.rso.get({universityid: $scope.university.u_id}, function(response) {
+            //$scope.rsos = response.data;
+            //
+            //angular.forEach($scope.rsos, function(value, key) {
+            //  value.filter = value.name;
+            //});
+            //
+            //// Setup default 'filter', this will grab all university and rso events
+            //$scope.rsos.unshift({name: 'University Events', filter: null, description: 'University Events'});
+            //$scope.rsos.unshift({name: 'All Events', filter: '', description: 'All Events & RSOs'});
+            //if($scope.rsos[2].id === null) {
+            //  var index = $scope.rsos.indexOf($scope.rsos[2]);
+            //  $scope.rsos.splice(index, 1);
+            //}
+            //$scope.rso.name = $scope.rsos[0]; // set deafult
+        //});
 
-            angular.forEach($scope.rsos, function(value, key) {
-              value.filter = value.name;
-            });
-
-            // Setup default 'filter', this will grab all university and rso events
-            $scope.rsos.unshift({name: 'University Events', filter: null, description: 'University Events'});
-            $scope.rsos.unshift({name: 'All Events', filter: '', description: 'All Events & RSOs'});
-            if($scope.rsos[2].id === null) {
-              var index = $scope.rsos.indexOf($scope.rsos[2]);
-              $scope.rsos.splice(index, 1);
-            }
-            $scope.rso.name = $scope.rsos[0]; // set deafult
-          }
-        });
-
-        Rso.query(function (response) {
-          $scope.rsorequests = response;
-        });
+        //Rso.query(function (response) {
+        //  $scope.rsorequests = response;
+        //});
     });
 
     var mapOptions = {
@@ -125,7 +127,7 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
     $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
     // This retrieves ALL events that the user is authorized to view, it will be filtered based on the drop down selector
-    User.events.get({s_id: Session.s_id}, function(response) {
+    User.events.query({s_id: Session.s_id}, function(response) {
       if(response.status == 200) {
         $scope.events = response.data;
       }
@@ -167,8 +169,9 @@ app.controller('HomeController', ['$rootScope', '$scope', 'authorized', 'User', 
 
         var check_distance = function(event) {
           // 2000 meters radius of the users location
-          if(2000 > google.maps.geometry.spherical.computeDistanceBetween($scope.map.center, new google.maps.LatLng(event.location_lat, event.location_lng)))
+          if(2000 > google.maps.geometry.spherical.computeDistanceBetween($scope.map.center, new google.maps.LatLng(event.location_lat, event.location_lng))) {
             $scope.filteredEvents.push($scope.events[i]);
+          }
         };
 
         for(i = 0; i < $scope.events.length; i++) {
