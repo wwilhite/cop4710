@@ -52,6 +52,7 @@ $app->post("/user/auth", function () use($app) {
         }
         echo json_encode($response);
     }
+    mysqli_close($database);
 });
 
 //get user
@@ -86,6 +87,7 @@ $app->get('/user/auth(/:username)(/:password)', function ($username, $password) 
             }
         }
     }
+    mysqli_close($database);
     echo json_encode($response);
 });
 
@@ -105,6 +107,7 @@ $app->get("/user/rsos(/:s_id)", function ($s_id) use($app) {
         $single[0] = $row;
         echo json_encode($single);
     }
+    mysqli_close($database);
 });
 
 // get events
@@ -148,6 +151,7 @@ $app->get('/event', function () use($app) {
 	} else {
         echo "0 results";
 	}
+    mysqli_close($database);
 });
 
 // get all events a user can see
@@ -190,11 +194,10 @@ $app->get('/user/events', function () use($app){
         }
         $json_response = json_encode($arr);
         echo $json_response;
-
     } else {
         echo "0 results";
     }
-
+    mysqli_close($database);
 });
 
 
@@ -244,6 +247,7 @@ $app->get('/university', function () use($app) {
 	} else {
         echo "0 results";
 	}
+    mysqli_close($database);
 });
 
 $app->post("/university", function () use($app) {
